@@ -7,8 +7,8 @@ class RollcallLogo extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: 342.50,
-          height: 219.68,
+          width: 364,
+          height: 364,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/images/rollcall_logo.png"),
