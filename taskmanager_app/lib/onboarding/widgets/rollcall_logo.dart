@@ -11,7 +11,7 @@ class RollcallLogo extends StatelessWidget {
           height: 364,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/images/rollcall_logo.png"),
+              image: AssetImage('assets/images/rollcall_logo.png'),
               fit: BoxFit.fill,
             ),
           ),
