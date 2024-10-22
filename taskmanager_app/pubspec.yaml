@@ -88,3 +88,67 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-Regular.ttf
+    - family: Nunito-Black
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-Black.ttf
+    - family: Nunito-BlackItalic
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-BlackItalic.ttf
+    - family: Nunito-Bold
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-Bold.ttf
+    - family: Nunito-BoldItalic
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-BoldItalic.ttf
+    - family: Nunito-ExtraBold
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-ExtraBold.ttf
+    - family: Nunito-ExtraBoldItalic
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-ExtraBoldItalic.ttf
+    - family: Nunito-ExtraLight
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-ExtraLight.ttf
+    - family: Nunito-ExtraLightItalic
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-ExtraLightItalic.ttf
+    - family: Nunito-Italic
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-Italic.ttf
+    - family: Nunito-ExtraLightItalic
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-ExtraLightItalic.ttf
+    - family: Nunito-Light
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-Light.ttf
+    - family: Nunito-LightItalic
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-LightItalic.ttf
+    - family: Nunito-Medium
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-Medium.ttf
+    - family: Nunito-MediumItalic
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-MediumItalic.ttf
+    - family: Nunito-SemiBold
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-SemiBold.ttf
+    - family: Nunito-SemiBoldItalic
+      fonts:
+        - asset: fonts/Nunito/static/Nunito-SemiBoldItalic.ttf
+    - family: Inter
+      fonts:
+        - asset: fonts/Inter/static/Inter_18pt-Regular.ttf    
+    - family: InterBlack
+      fonts:
+        - asset: fonts/Inter/static/Inter_18pt-Black.ttf
+    - family: Baloo
+      fonts:
+        - asset: fonts/baloo/Baloo-Regular.ttf
+    - family: Knewave
+      fonts:
+        - asset: fonts/Knewave/Knewave-Regular.ttf
