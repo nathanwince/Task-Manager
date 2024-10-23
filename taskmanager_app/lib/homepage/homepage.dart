@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'widgets1/header.dart';
-import 'widgets1/navbar.dart';
-import 'widgets1/firstcheckout.dart';
-import 'widgets1/secondcheckout.dart';
-import 'widgets1/streak_bar.dart';
-import 'widgets1/upcoming_tasks.dart';
+import 'widgets/header.dart';
+import 'widgets/navbar.dart';
+import 'widgets/firstcheckout.dart';
+import 'widgets/secondcheckout.dart';
+import 'widgets/streak_bar.dart';
+import 'widgets/upcoming_tasks.dart';
 
 class HomePage extends StatelessWidget {
   @override
