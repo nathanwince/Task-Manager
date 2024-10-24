@@ -58,7 +58,7 @@ class Navbar extends StatelessWidget {
               height: 30,
             ),
             onPressed: () {
-              Navigator.pushNamed(context, '/bookmarks'); // Navigate to Bookmarks Page
+              // Define action when Stats is pressed
             },
           ),
           // Profile Icon
