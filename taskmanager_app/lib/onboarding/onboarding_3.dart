@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskmanager_app/homepage/homepage.dart';
 import 'package:taskmanager_app/onboarding/widgets/onboarding_text3.dart'; // Import the text widget for the third onboarding slide
 import 'widgets/next_button.dart'; // Import the NextButton widget
 import 'widgets/onboarding_header.dart'; // Import the RollcallHeader widget
@@ -45,10 +46,10 @@ class Onboarding03 extends StatelessWidget {
               child: NextButton01(
                 onPressed: () {
                   // Action for the button, e.g., finishing onboarding
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => HomePage()), // Ensure HomePage is defined
-                  // );
+                  Navigator.push(
+                     context,
+                     MaterialPageRoute(builder: (context) => HomePage()), // Ensure HomePage is defined
+                   );
                 },
               ),
             ),
