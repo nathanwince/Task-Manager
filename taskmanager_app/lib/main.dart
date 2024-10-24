@@ -4,6 +4,7 @@ import 'onboarding/onboarding_1.dart';  // Import the first Onboarding page
 import 'onboarding/onboarding_2.dart';  // Import the second Onboarding page
 import 'onboarding/onboarding_3.dart';  // Import the third Onboarding page 
 import 'homepage/homepage.dart';        // Import Homepage
+import 'calendar/calendar.dart';   // Import CalendarPage
 
 void main() {
   runApp(MyApp());
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         '/onboarding2': (context) => Onboarding02(),  // Second onboarding screen
         '/onboarding3': (context) => Onboarding03(),  // Third onboarding screen 
         '/home': (context) => HomePage(),             // Homepage
+        '/calendar': (context) => CalendarPage(),     // Calendar Page
       },
     );
   }
