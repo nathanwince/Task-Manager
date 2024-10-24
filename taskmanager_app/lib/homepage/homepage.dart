@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:taskmanager_app/shared/navbar.dart';
+
 import 'widgets/header.dart';
-import 'widgets/navbar.dart';
 import 'widgets/firstcheckout.dart';
 import 'widgets/secondcheckout.dart';
 import 'widgets/streak_bar.dart';

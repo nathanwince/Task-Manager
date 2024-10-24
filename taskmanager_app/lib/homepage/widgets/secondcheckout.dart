@@ -78,7 +78,11 @@ class SecondCheckout extends StatelessWidget {
           ),
           // Today’s Tasks Button
           Padding(
-            padding: EdgeInsets.only(left: 12, right: 6), // Consistent padding to match vertical spacing
+          padding: EdgeInsets.only(left: 12, right: 6), // Consistent padding to match vertical spacing
+          child: GestureDetector(
+          onTap: () {
+              Navigator.pushNamed(context, '/taskpage');  // Navigate to TaskPage when tapped
+              },
             child: Container(
               width: 270,
               height: 110,
@@ -140,6 +144,7 @@ class SecondCheckout extends StatelessWidget {
               ),
             ),
           ),
+         ),
         ],
       ),
     );
