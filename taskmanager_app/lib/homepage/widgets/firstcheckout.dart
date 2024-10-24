@@ -9,7 +9,7 @@ class FirstCheckout extends StatelessWidget {
         children: [
           // Daily Motivation Button
           Padding(
-            padding: EdgeInsets.only(left: 6, right: 12), // Consistent padding to match vertical spacing
+            padding: EdgeInsets.only(left: 6, right: 12), 
             child: Container(
               width: 270, // Increased width for better fit
               height: 110,

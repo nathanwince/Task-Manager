@@ -5,6 +5,8 @@ import 'onboarding/onboarding_2.dart';  // Import the second Onboarding page
 import 'onboarding/onboarding_3.dart';  // Import the third Onboarding page 
 import 'homepage/homepage.dart';        // Import Homepage
 import 'calendar/calendar.dart';   // Import CalendarPage
+import 'taskpage/taskpage.dart'; //Import TaskPage
+import 'motivation/dailymotivation.dart'; //Import DailyMotivation Page
 
 void main() {
   runApp(MyApp());
@@ -28,6 +30,8 @@ class MyApp extends StatelessWidget {
         '/onboarding3': (context) => Onboarding03(),  // Third onboarding screen 
         '/home': (context) => HomePage(),             // Homepage
         '/calendar': (context) => CalendarPage(),     // Calendar Page
+        '/taskpage': (context) => TaskPage(),     // Calendar Page
+        '/dailymotivation': (context) => DailyMotivation(),     // Daily Motivation Page
       },
     );
   }
