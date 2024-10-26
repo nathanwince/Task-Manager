@@ -74,8 +74,29 @@ flutter:
     - assets/images/chart.png
     - assets/images/person.png
     - assets/images/home.png
-
-   
+    - assets/images/bottommiddle.png
+    - assets/images/settingswheel.png
+    - assets/images/splashbottomleft.svg
+    - assets/images/splashbottomright.svg
+    - assets/images/splashright.svg
+    - assets/images/splashtopright.svg
+    - assets/images/topright.png
+    - assets/images/toptopright.png
+    - assets/images/2big.png
+    - assets/images/2biggest.png
+    - assets/images/2small.png
+    - assets/images/2smallest.png
+    - assets/images/onboarding2.png
+    - assets/images/onboarding3back.png
+    - assets/images/background_teal.png
+    - assets/images/background_purple.png
+    - assets/images/background_orange.png
+    - assets/images/background_blue.png
+    - assets/images/background_red.png
+    - assets/images/background_green.png
+    - assets/images/background_white.png
+    - assets/images/pfp.png
+    - assets/images/background_orangelight.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
