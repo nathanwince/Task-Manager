@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'onboarding_1.dart'; // Import your onboarding page
-import 'widgets/getstarted_button.dart'; // Import the GetStartedButton widget
-import 'widgets/rollcall_logo.dart'; // Import the RollcallLogo widget
-import 'widgets/rollcall_title.dart'; // Import the RollcallTitle widget
+import '../widgets/onboarding/widgets/getstarted_button.dart'; // Import the GetStartedButton widget
+import '../widgets/onboarding/widgets/rollcall_logo.dart'; // Import the RollcallLogo widget
+import '../widgets/onboarding/widgets/rollcall_title.dart'; // Import the RollcallTitle widget
 
 class SplashPage extends StatelessWidget {
   @override

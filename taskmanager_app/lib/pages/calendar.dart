@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import '../shared/backarrow_button.dart';
 import '../shared/navbar.dart';
-
-import 'widgets/calendar_buttons.dart';
-import 'widgets/currentday_task.dart';
+import '../widgets/calendar/widgets/calendar_buttons.dart';
+import '../widgets/calendar/widgets/currentday_task.dart';
 
 class CalendarPage extends StatelessWidget {
   @override

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../shared/backarrow_button.dart';
 import '../shared/navbar.dart';
 
-import 'widgets/hp_task.dart';
-import 'widgets/lp_task.dart';
-import 'widgets/mp_task.dart';
-import 'widgets/schedule.dart';
+import '../widgets/task_page/widgets/hp_task.dart';
+import '../widgets/task_page/widgets/lp_task.dart';
+import '../widgets/task_page/widgets/mp_task.dart';
+import '../widgets/task_page/widgets/schedule.dart';
 
 class TaskPage extends StatelessWidget {
   @override

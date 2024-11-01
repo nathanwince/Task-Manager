@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'widgets/backarrow_button.dart';
-import 'widgets/bookmark_tasks.dart';
-import 'widgets/navbar.dart';
-import 'widgets/tips.dart';
+import '../widgets/bookmarks/widgets/backarrow_button.dart';
+import '../widgets/bookmarks/widgets/bookmark_tasks.dart';
+import '../widgets/bookmarks/widgets/navbar.dart';
+import '../widgets/bookmarks/widgets/tips.dart';
 
 class BookmarksPage extends StatelessWidget {
   @override

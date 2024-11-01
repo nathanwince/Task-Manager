@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import '../shared/backarrow_button.dart';
 import '../shared/navbar.dart';
+import '../widgets/daily_motivation/widgets/motivation_container.dart'; // Ensure this widget is correctly implemented
+import '../widgets/daily_motivation/widgets/motivation_tip.dart';
+import '../widgets/daily_motivation/widgets/motivation_title.dart';
+import '../widgets/daily_motivation/widgets/motivation_viewtext.dart';
 
-import 'widgets/motivation_container.dart'; // Ensure this widget is correctly implemented
-import 'widgets/motivation_tip.dart';
-import 'widgets/motivation_title.dart';
-import 'widgets/motivation_viewtext.dart';
-
-class DailyMotivation extends StatelessWidget {
+class DailyMotivationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

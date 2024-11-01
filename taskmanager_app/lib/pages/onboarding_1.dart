@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:taskmanager_app/onboarding/onboarding_2.dart';
-import 'widgets/next_button.dart'; // Import the NextButton widget
-import 'widgets/onboarding_header.dart'; // Import the RollcallHeader widget
-import 'widgets/onboarding_slide1.dart'; // Import the content for the first onboarding slide
-import 'widgets/onboarding_text1.dart'; // Import the text widget for the first onboarding slide
+import 'package:taskmanager_app/pages/onboarding_2.dart';
+import '../widgets/onboarding/widgets/next_button.dart'; // Import the NextButton widget
+import '../widgets/onboarding/widgets/onboarding_header.dart'; // Import the RollcallHeader widget
+import '../widgets/onboarding/widgets/onboarding_slide1.dart'; // Import the content for the first onboarding slide
+import '../widgets/onboarding/widgets/onboarding_text1.dart'; // Import the text widget for the first onboarding slide
 
 class Onboarding01 extends StatelessWidget {
   @override
