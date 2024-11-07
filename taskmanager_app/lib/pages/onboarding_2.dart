@@ -1,60 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:taskmanager_app/pages/onboarding_3.dart';
-import 'package:taskmanager_app/widgets/onboarding/widgets/onboarding_text2.dart';
-import '../widgets/onboarding/widgets/next_button.dart'; // Import the NextButton widget
-import '../widgets/onboarding/widgets/onboarding_header.dart'; // Import the RollcallHeader widget
-import '../widgets/onboarding/widgets/onboarding_slide2.dart'; // Import the content for the second onboarding slide
+import '../shared/next_button.dart'; 
+import '../shared/onboarding_header.dart'; 
+import '../shared/slide_indicator.dart'; 
+import '../widgets/onboarding_2/onboarding_content2.dart'; 
 
-class Onboarding02 extends StatelessWidget {
+const Color kBackgroundColor = Color(0xFF03174C);
+
+class Onboarding2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Color(0xFF03174C), // Background color
-        child: Stack(
-          children: [
-            // Positioned Header
-            Positioned(
-              left: 16, // Adjust the left position (e.g., 16px)
-              top: 16, // Adjust the top position (e.g., 16px)
-              child: RollCallHeader(),  // Use the header widget
-            ),
+      backgroundColor: kBackgroundColor,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center, // Center horizontally
+        children: [
 
-            // Onboarding Text Content (Position it exactly where needed)
-            Positioned(
-              left: 62, // Adjust based on the design
-              top: 515, // Adjust this value as needed
-              right: 62, // Align this with the left value for consistency
-              child: OnboardingText02(),  // Add your text widget here
-            ),
+          OnboardingHeader(),
 
-            // Onboarding Slide (Below the text)
-            Positioned(
-              left: 188, // Adjust based on the design
-              bottom: 219, // Adjust this value based on the design
-              right: 186, // Align it with the left for proper centering
-              child: OnboardingSlide02(), // The content of the second onboarding slide
-            ),
 
-            // Positioned Next Button
-            Positioned(
-              left: 36, // Adjust based on the design
-              bottom: 81, // Adjust based on the design
-              right: 36, // Align it with the left for consistency
-              child: NextButton01(
-                onPressed: () {
-                  // Navigate to the next onboarding page or finish onboarding
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Onboarding03()), // Ensure Onboarding03 is defined
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+          const SizedBox(height: 80), // Space below the header
+
+          // Onboarding Slide Content
+          OnboardingSlide2(),
+
+          const SizedBox(height: 150), // Space before the indicator
+
+          // Centered Slide Indicator
+          Center(
+            child: SlideIndicator(currentIndex: 1, totalSlides: 3),
+          ),
+        ],
+      ),
+      bottomNavigationBar: NextButton01(
+        onPressed: () {
+          // Navigate to the next onboarding page
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Onboarding3()),
+          );
+        },
       ),
     );
   }

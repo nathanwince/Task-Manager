@@ -8,6 +8,9 @@ import 'pages/calendar.dart';
 import 'pages/bookmarks.dart';     
 import 'pages/addtask.dart';
 import 'pages/dailymotivation.dart'; 
+import 'pages/notes.dart'; 
+import 'pages/weekly_summary.dart';
+import 'pages/todays_task.dart'; 
 
 void main() {
   runApp(MyApp());
@@ -26,14 +29,17 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => SplashPage(),
-        '/onboarding1': (context) => Onboarding01(),
-        '/onboarding2': (context) => Onboarding02(),
-        '/onboarding3': (context) => Onboarding03(),
+        '/onboarding1': (context) => Onboarding1(),
+        '/onboarding2': (context) => Onboarding2(),
+        '/onboarding3': (context) => Onboarding3(),
         '/home': (context) => HomePage(),
         '/calendar': (context) => CalendarPage(),
         '/bookmarks': (context) => BookmarksPage(),
         '/addtask': (context) => AddTaskPage(),
-        '/dailymotivation': (context) => DailyMotivationPage(),  // Add the Daily Motivation route
+        '/dailymotivation': (context) => DailyMotivationPage(),  
+        '/notes': (context) => NotesPage(), 
+        '/weeklysummary': (context) => WeeklySummaryPage(),
+        '/todaystask': (context) => TodaysTaskPage(), 
       },
     );
   }

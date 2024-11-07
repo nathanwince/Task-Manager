@@ -10,7 +10,7 @@ class BackArrowWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap ?? () => Navigator.pop(context), // Navigate back by default
       child: Container(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0), // Padding around the icon
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
           color: Colors.transparent,

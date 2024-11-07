@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../widgets/bookmarks/widgets/backarrow_button.dart';
-import '../widgets/bookmarks/widgets/bookmark_tasks.dart';
-import '../widgets/bookmarks/widgets/navbar.dart';
-import '../widgets/bookmarks/widgets/tips.dart';
+import '../shared/backarrow_button.dart';
+import '../widgets/bookmarks/bookmark_tasks.dart';
+import '../shared/navbar.dart';
+import '../widgets/bookmarks/tips.dart';
 
 class BookmarksPage extends StatelessWidget {
   @override
@@ -13,10 +13,7 @@ class BookmarksPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start, // Align content to the left
         children: [
           // Back Arrow Button
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-            child: BackArrowWidget(), // Custom widget for back navigation
-          ),
+          BackArrowWidget(), // Custom widget for back navigation
 
           // Centered Bookmarks Text
           Center(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../shared/backarrow_button.dart';
 import '../shared/navbar.dart';
-import '../widgets/calendar/widgets/calendar_buttons.dart';
-import '../widgets/calendar/widgets/currentday_task.dart';
+import '../widgets/calendar/calendar_buttons.dart';
+import '../widgets/calendar/currentday_task.dart';
 
 class CalendarPage extends StatelessWidget {
   @override
@@ -12,11 +12,8 @@ class CalendarPage extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start, // Align to the left
         children: [
-          // Back Arrow Button
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-            child: BackArrowWidget(), // Custom widget for back navigation
-          ),
+          // Back Arrow Button without padding
+          BackArrowWidget(), // Custom widget for back navigation
 
           // Centered Calendar Text
           Center(
