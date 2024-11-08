@@ -1,0 +1,1 @@
+# Settings model for notification, privacy, accessibility
