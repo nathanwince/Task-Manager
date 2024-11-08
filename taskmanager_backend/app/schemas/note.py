@@ -1,1 +1,0 @@
-# Notes Model for user notes
