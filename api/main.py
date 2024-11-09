@@ -1,13 +1,15 @@
 import uvicorn
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import index as indexRoute
-from .models import model_loader
-from .dependencies.config import conf
+from api.routers import user_router, task_router  # Adjusted import with `api` prefix
+from api.models.model_loader import load_models
+from api.dependencies.config import conf
 
 
+# Initialize FastAPI application
 app = FastAPI()
 
+# CORS settings - allow all origins for testing (adjust in production)
 origins = ["*"]
 
 app.add_middleware(
@@ -18,9 +20,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-model_loader.index()
-indexRoute.load_routes(app)
+# Load models and create database tables
+load_models()
 
+# Include routers for user and task endpoints
+app.include_router(user_router.router, prefix="/users", tags=["Users"])
+app.include_router(task_router.router, prefix="/tasks", tags=["Tasks"])
 
+# Run the application if this file is executed directly
 if __name__ == "__main__":
     uvicorn.run(app, host=conf.app_host, port=conf.app_port)
