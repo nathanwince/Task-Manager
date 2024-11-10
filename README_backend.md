@@ -25,7 +25,8 @@ source venv/bin/activate
 venv\Scripts\activate
 
 
-### Step 3: Install Dependencies
+### Step 3: Install Dependencies (You always want to be in your virtual environment, installing the dependecies)
+
 
 ### Installing necessary packages:  
 pip install -r requirements.txt
