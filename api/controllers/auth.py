@@ -1,25 +1,30 @@
+# controllers/auth.py
 from sqlalchemy.orm import Session
-from api.models.user import User
-from api.schemas.user import UserCreate, UserUpdate
 from fastapi import HTTPException, status
+from api.models.user import User
+from api.schemas.user import UserCreate
 from passlib.context import CryptContext
 
-# Initialize password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
-
 def create_user(db: Session, user: UserCreate):
-    hashed_password = hash_password(user.password)
+    # Check if email already exists
+    existing_user = db.query(User).filter(User.email == user.email).first()
+    if existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="A user with this email already exists."
+        )
+    
+    hashed_password = pwd_context.hash(user.password)
     db_user = User(
         name=user.name,
         email=user.email,
         phone_number=user.phone_number,
-        password=hashed_password
+        password=hashed_password,
+        streak_count=0,
+        longest_streak=0,
+        tasks_completed=0
     )
     db.add(db_user)
     db.commit()
@@ -27,30 +32,10 @@ def create_user(db: Session, user: UserCreate):
     return db_user
 
 def get_user(db: Session, user_id: int):
-    return db.query(User).filter(User.id == user_id).first()
-
-def update_user(db: Session, user_id: int, request: UserUpdate):
-    user = get_user(db, user_id)
-    if not user:
-        return None
-    
-    if request.name:
-        user.name = request.name
-    if request.email:
-        user.email = request.email
-    if request.phone_number:
-        user.phone_number = request.phone_number
-    if request.password:
-        user.password = hash_password(request.password)
-    
-    db.commit()
-    db.refresh(user)
+    user = db.query(User).filter(User.id == user_id).first()
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found."
+        )
     return user
-
-def delete_user(db: Session, user_id: int):
-    user = get_user(db, user_id)
-    if not user:
-        return None
-    db.delete(user)
-    db.commit()
-    return True

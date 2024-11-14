@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
 from api.controllers import auth as controller
+from api.controllers.user import get_user_progress  # Import the progress function
 from api.dependencies.database import get_db
 from api.schemas import user as schema
 
@@ -33,3 +34,11 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     if not controller.delete_user(db=db, user_id=user_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+# New route to get user's streak and task progress
+@router.get("/{user_id}/progress", response_model=schema.UserOut)
+def get_user_streak_progress(user_id: int, db: Session = Depends(get_db)):
+    progress_data = get_user_progress(db, user_id)
+    if not progress_data:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return progress_data

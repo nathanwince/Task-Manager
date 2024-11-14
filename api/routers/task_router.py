@@ -17,9 +17,16 @@ def create_task(request: schema.TaskCreate, user_id: int, db: Session = Depends(
 def get_user_tasks(user_id: int, db: Session = Depends(get_db)):
     return controller.get_tasks_for_user(db=db, user_id=user_id)
 
-@router.put("/{task_id}/complete", response_model=schema.TaskOut)
-def complete_task(task_id: int, db: Session = Depends(get_db)):
-    task = controller.mark_task_complete(db=db, task_id=task_id)
+@router.get("/{task_id}", response_model=schema.TaskOut)
+def get_task(task_id: int, db: Session = Depends(get_db)):
+    task = controller.get_task(db=db, task_id=task_id)
+    if not task:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
+    return task
+
+@router.put("/{task_id}", response_model=schema.TaskOut)
+def update_task(task_id: int, request: schema.TaskUpdate, db: Session = Depends(get_db)):
+    task = controller.update_task(db=db, task_id=task_id, task_data=request)
     if not task:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
     return task
