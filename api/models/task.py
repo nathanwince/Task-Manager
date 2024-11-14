@@ -13,6 +13,8 @@ class Task(Base):
     user_id = Column(Integer, ForeignKey("users.id"))  # Foreign key linking task to a user
     created_at = Column(DateTime, default=func.now())  # Creation timestamp
     due_date = Column(DateTime)
+    priority = Column(Integer, default=2)  # Default priority level, e.g., 2 for "medium" 3 for "low"
+
 
     # Relationship with user
     user = relationship("User", back_populates="tasks")

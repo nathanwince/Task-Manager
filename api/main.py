@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.routers import user_router, task_router  # Adjusted import with `api` prefix
+from api.routers import user_router, task_router, note_router  
 from api.models.model_loader import load_models
 from api.dependencies.config import conf
 
@@ -26,6 +26,7 @@ load_models()
 # Include routers for user and task endpoints
 app.include_router(user_router.router, prefix="/users", tags=["Users"])
 app.include_router(task_router.router, prefix="/tasks", tags=["Tasks"])
+app.include_router(note_router.router)
 
 # Run the application if this file is executed directly
 if __name__ == "__main__":
