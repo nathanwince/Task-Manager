@@ -23,3 +23,9 @@ def update_note(db: Session, note_id: int, note_data: NoteUpdate):
     db.commit()
     db.refresh(note)
     return note
+
+def get_notes_for_user(db: Session, user_id: int):
+    notes = db.query(Note).filter(Note.user_id == user_id).all()
+    if not notes:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No notes found for this user.")
+    return notes
