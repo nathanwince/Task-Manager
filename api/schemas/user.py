@@ -29,5 +29,17 @@ class UserOut(BaseModel):
     completed_tasks_today: int = 0  # Default if not part of the model or calculated
 
 
+class UserProgress(BaseModel):
+    id: int
+    name: str
+    email: str
+    created_at: datetime
+    streak_count: int
+    longest_streak: int
+    tasks_completed: int
+    daily_tasks: int
+    remaining_tasks: int
+
+
     class Config:
         from_attributes = True  # Updated for Pydantic v2

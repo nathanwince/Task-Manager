@@ -67,6 +67,14 @@ Ensure that MySQL is running and that you’ve created a user with the following
 CREATE DATABASE TaskManager;
 USE TaskManager;
 
+#### EVERY SESSION SHOULD LOOK LIKE THIS 
+#### IN VS CODE, OPEN NEW TERMINAL
+GitHub\Task-Manager> .\venv\Scripts\Activate
+GitHub\Task-Manager> uvicorn api.main:app --reload
+
+#### IN COMMAND PROMPT (OUTSIDE OF VS CODE)
+mysql -u rollcall -p
+USE TaskManager;
 
 ##### Step 5: Run the server:
 `uvicorn api.main:app --reload`

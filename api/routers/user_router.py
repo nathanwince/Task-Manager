@@ -36,9 +36,6 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 # New route to get user's streak and task progress
-@router.get("/{user_id}/progress", response_model=schema.UserOut)
+@router.get("/users/{user_id}/progress", response_model=schema.UserProgress)
 def get_user_streak_progress(user_id: int, db: Session = Depends(get_db)):
-    progress_data = get_user_progress(db, user_id)
-    if not progress_data:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return progress_data
+    return get_user_progress(db, user_id)
