@@ -1,9 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
-from api.controllers import auth as controller
-from api.controllers.user import get_user_progress  # Import the progress function
+from api.controllers.auth import create_user as create_user_controller, authenticate_user
+from api.controllers.user import get_user_progress
 from api.dependencies.database import get_db
-from api.schemas import user as schema
+from api.models.user import User
+from api.schemas.user import UserCreate, UserLogin, UserProgress, UserOut, UserUpdate
+from passlib.context import CryptContext
 
 
 router = APIRouter(
@@ -11,31 +13,55 @@ router = APIRouter(
     prefix="/users"
 )
 
-@router.post("/", response_model=schema.UserOut, status_code=status.HTTP_201_CREATED)
-def create_user(request: schema.UserCreate, db: Session = Depends(get_db)):
-    return controller.create_user(db=db, user=request)
+# Create a new user
+@router.post("/", response_model=UserOut, status_code=status.HTTP_201_CREATED)
+def create_user(request: UserCreate, db: Session = Depends(get_db)):
+    return create_user_controller(db=db, user=request)
 
-@router.get("/{user_id}", response_model=schema.UserOut)
+# Read user by ID
+@router.get("/{user_id}", response_model=UserOut)
 def read_user(user_id: int, db: Session = Depends(get_db)):
-    user = controller.get_user(db, user_id=user_id)
+    user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     return user
 
-@router.put("/{user_id}", response_model=schema.UserOut)
-def update_user(user_id: int, request: schema.UserUpdate, db: Session = Depends(get_db)):
-    user = controller.update_user(db=db, user_id=user_id, request=request)
+# Update user details
+@router.put("/{user_id}", response_model=UserOut)
+def update_user(user_id: int, request: UserUpdate, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    for key, value in request.dict().items():
+        setattr(user, key, value)
+    db.commit()
+    db.refresh(user)
     return user
 
+# Delete user by ID
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(user_id: int, db: Session = Depends(get_db)):
-    if not controller.delete_user(db=db, user_id=user_id):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    db.delete(user)
+    db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-# New route to get user's streak and task progress
-@router.get("/users/{user_id}/progress", response_model=schema.UserProgress)
+# Get user's streak and task progress
+@router.get("/{user_id}/progress", response_model=UserProgress)
 def get_user_streak_progress(user_id: int, db: Session = Depends(get_db)):
     return get_user_progress(db, user_id)
+
+# New Login Endpoint
+@router.post("/login/")
+def login_user(user: UserLogin, db: Session = Depends(get_db)):
+    db_user = authenticate_user(db, email_or_phone=user.email, password=user.password)
+    return {
+        "id": db_user.id,
+        "name": db_user.name,
+        "email": db_user.email,
+        "streak_count": db_user.streak_count,
+        "longest_streak": db_user.longest_streak,
+        "tasks_completed": db_user.tasks_completed,
+    }

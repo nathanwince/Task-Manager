@@ -1,11 +1,15 @@
 # controllers/user.py
 from sqlalchemy.orm import Session
 from datetime import date
-from fastapi import HTTPException 
+from fastapi import HTTPException
 from api.models.user import User
 from api.models.task import Task
 
+
 def get_user_progress(db: Session, user_id: int):
+    """
+    Retrieve user's progress including tasks and streak information.
+    """
     today = date.today()
 
     # Fetch tasks for today
@@ -16,22 +20,21 @@ def get_user_progress(db: Session, user_id: int):
     # Calculate remaining tasks
     remaining_tasks = total_tasks - completed_tasks_today
 
-    # Fetch user streak info (you may need to store this in a `User` table or similar)
+    # Fetch user streak information
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    # Check if the user completed all tasks today
+    # Update streak count
     if total_tasks > 0 and completed_tasks_today == total_tasks:
         # User completed all tasks for today, increment the streak count
         user.streak_count += 1
         user.longest_streak = max(user.longest_streak, user.streak_count)
-    else:
+    elif completed_tasks_today == 0:
         # Reset streak if no tasks were completed today
-        if completed_tasks_today == 0:
-            user.streak_count = 0
+        user.streak_count = 0
 
-    db.commit()  # Save any changes to the streak count
+    db.commit()  # Save changes to the streak count
 
     # Return progress data
     return {

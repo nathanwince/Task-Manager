@@ -17,6 +17,11 @@ class UserUpdate(BaseModel):
     phone_number: Optional[str] = None
     password: Optional[str] = None
 
+# Schema for user login
+class UserLogin(BaseModel):
+    email: str
+    password: str
+    
 class UserOut(BaseModel):
     id: int
     name: str
