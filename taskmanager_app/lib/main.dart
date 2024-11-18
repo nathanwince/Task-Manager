@@ -3,7 +3,9 @@ import 'onboarding/splashpage.dart';  // Import the SplashPage
 import 'onboarding/onboarding_1.dart';  // Import the first Onboarding page
 import 'onboarding/onboarding_2.dart';  // Import the second Onboarding page
 import 'onboarding/onboarding_3.dart';  // Import the third Onboarding page 
-import 'notes/notepage1.dart';  // Import the notepage
+import 'login/Signup.dart';  
+import 'login/EditProfile.dart';  
+import 'login/Signup.dart';  
 
 void main() {
   runApp(MyApp());
@@ -21,7 +23,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',  // Define the initial route
       routes: {
-        '/': (context) => NotePage(),  // Set SplashPage as the home screen
+        '/': (context) => SplashPage(),  // Set SplashPage as the home screen
         '/onboarding1': (context) => Onboarding01(),  // First onboarding screen
         '/onboarding2': (context) => Onboarding02(),  // Second onboarding screen
         '/onboarding3': (context) => Onboarding03(),  // Third onboarding screen 
