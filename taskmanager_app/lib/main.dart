@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskmanager_app/pages/login.dart';
 import 'pages/splashpage.dart';  
 import 'pages/onboarding_1.dart';  
 import 'pages/onboarding_2.dart';  
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => SplashPage(),
+        '/': (context) => LoginPage(),
         '/onboarding1': (context) => Onboarding1(),
         '/onboarding2': (context) => Onboarding2(),
         '/onboarding3': (context) => Onboarding3(),

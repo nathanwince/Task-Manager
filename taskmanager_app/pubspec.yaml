@@ -35,7 +35,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  http: ^0.15.0 # For API requests
+  http: ^1.2.2 # For API requests
   image_picker: ^0.8.5+3 # For selecting images from the gallery or camera
 
 dev_dependencies:
