@@ -51,7 +51,9 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
 # Get user's streak and task progress
 @router.get("/{user_id}/progress", response_model=UserProgress)
 def get_user_streak_progress(user_id: int, db: Session = Depends(get_db)):
+    print(f"Fetching progress for user_id: {user_id}")
     return get_user_progress(db, user_id)
+
 
 # New Login Endpoint
 @router.post("/login/")

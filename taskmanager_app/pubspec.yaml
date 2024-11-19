@@ -37,6 +37,10 @@ dependencies:
   cupertino_icons: ^1.0.8
   http: ^1.2.2 # For API requests
   image_picker: ^0.8.5+3 # For selecting images from the gallery or camera
+  flutter_secure_storage: ^8.0.0
+  intl: ^0.18.0 # Use the latest version
+
+
 
 dev_dependencies:
   flutter_test:

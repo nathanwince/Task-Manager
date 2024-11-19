@@ -1,10 +1,11 @@
 # controllers/user.py
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.expression import cast
+from sqlalchemy.types import Date
 from datetime import date
 from fastapi import HTTPException
 from api.models.user import User
 from api.models.task import Task
-
 
 def get_user_progress(db: Session, user_id: int):
     """
@@ -13,7 +14,7 @@ def get_user_progress(db: Session, user_id: int):
     today = date.today()
 
     # Fetch tasks for today
-    tasks_today = db.query(Task).filter(Task.user_id == user_id, Task.due_date == today).all()
+    tasks_today = db.query(Task).filter(Task.user_id == user_id, cast(Task.due_date, Date) == today).all()
     total_tasks = len(tasks_today)
     completed_tasks_today = sum(task.completed for task in tasks_today)
 
@@ -34,7 +35,17 @@ def get_user_progress(db: Session, user_id: int):
         # Reset streak if no tasks were completed today
         user.streak_count = 0
 
-    db.commit()  # Save changes to the streak count
+    # Commit updates
+    try:
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Database commit error: {str(e)}")
+
+    # Log for debugging
+    print(f"User Progress - User ID: {user_id}, Total Tasks: {total_tasks}, "
+          f"Completed: {completed_tasks_today}, Remaining: {remaining_tasks}, "
+          f"Streak: {user.streak_count}, Longest Streak: {user.longest_streak}")
 
     # Return progress data
     return {

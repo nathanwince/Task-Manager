@@ -1,90 +1,115 @@
 import 'package:flutter/material.dart';
 
-// Key constants for layout and styling
-const double kStreakBarHeight = 34.0;
-const double kIconSize = 25.0;
-const double kProgressBarHeight = 10.0;
-const double kProgressWidthFactor = 0.4; // Example progress of 40%
-const double kHorizontalPadding = 16.0;
+const double kOuterContainerHeight = 50.0; // Height of the outer container
+const double kProgressBarHeight = 12.0; // Height of the progress bar
+const double kIconSize = 36.0; // Fire icon size
+const double kHorizontalPadding = 16.0; // Horizontal padding for the container
 
 class StreakBar extends StatelessWidget {
+  final int tasksRemaining;
+  final int totalTasks;
+  final int streakCount;
+
+  const StreakBar({
+    Key? key,
+    required this.tasksRemaining,
+    required this.totalTasks,
+    required this.streakCount,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return _buildSection(
-      Container(
-        height: kStreakBarHeight,
+    // Calculate progress bar fill factor
+    double progressWidthFactor = totalTasks == 0
+        ? 0.0
+        : (totalTasks - tasksRemaining) / totalTasks;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: kHorizontalPadding),
+      child: Container(
+        height: kOuterContainerHeight,
         decoration: BoxDecoration(
-          color: const Color(0xFFFFC800),
-          borderRadius: BorderRadius.circular(23),
+          color: const Color(0xFFFFC800), // Yellow background color
+          borderRadius: BorderRadius.circular(25), // Rounded corners
           boxShadow: [
             BoxShadow(
-              color: const Color(0x998C7213),
-              blurRadius: 2,
-              offset: const Offset(2, 3),
-            ),
-            BoxShadow(
-              color: const Color(0x998C7213),
-              blurRadius: 4,
-              offset: const Offset(0, 4),
+              color: const Color(0x998C7213), // Shadow color
+              blurRadius: 6,
+              offset: const Offset(2, 4),
             ),
           ],
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Fire icon with left padding
+            // Fire Icon with Streak Count
             Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Image.asset(
-                "assets/images/firetask_logo.png",
-                width: kIconSize,
-                height: kIconSize,
+              padding: const EdgeInsets.only(left: 12.0), // Space to the left
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset(
+                    "assets/images/firetask_logo.png",
+                    width: kIconSize,
+                    height: kIconSize,
+                  ),
+                  if (streakCount > 0)
+                    Text(
+                      '$streakCount',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                ],
               ),
             ),
-            // Task count text with consistent left padding
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Text(
-                '5 tasks remaining',
-                style: const TextStyle(
-                  color: Color(0xFF8C4814),
-                  fontSize: 14,
-                  fontFamily: 'Nunito',
-                  fontWeight: FontWeight.bold,
-                ),
+            const SizedBox(width: 12.0), // Space between icon and text
+
+            // Task Remaining Text
+            Text(
+              '$tasksRemaining tasks remaining',
+              style: const TextStyle(
+                color: Color(0xFFD91E18), // Red text color
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            // Progress bar with horizontal padding for alignment
+            const SizedBox(width: 12.0), // Space between text and bar
+
+            // Progress Bar
             Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                height: kProgressBarHeight,
-                decoration: BoxDecoration(
-                  color: Color(0xFFB97215),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: FractionallySizedBox(
-                  alignment: Alignment.centerLeft,
-                  widthFactor: kProgressWidthFactor,
-                  child: Container(
+              child: Stack(
+                alignment: Alignment.centerLeft,
+                children: [
+                  // Background of the progress bar
+                  Container(
+                    height: kProgressBarHeight,
                     decoration: BoxDecoration(
-                      color: Color(0xFFFF8700),
+                      color: const Color(0xFFB97215), // Bar background color
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
-                ),
+                  // Progress Fill
+                  FractionallySizedBox(
+                    alignment: Alignment.centerLeft,
+                    widthFactor: progressWidthFactor,
+                    child: Container(
+                      height: kProgressBarHeight,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFF8700), // Fill color
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
+            const SizedBox(width: 12.0), // Right padding for balance
           ],
         ),
       ),
-    );
-  }
-
-  // Helper method for consistent horizontal padding
-  Widget _buildSection(Widget child) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: kHorizontalPadding),
-      child: child,
     );
   }
 }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DateDisplay extends StatelessWidget {
-  final String date;
-
-  const DateDisplay({Key? key, required this.date}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    // Get the current date and format it
+    final String currentDate = DateFormat('MMMM d').format(DateTime.now());
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -22,12 +22,12 @@ class DateDisplay extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            date,
+            currentDate, // Format is not bolded
             style: TextStyle(
               color: Colors.white,
               fontSize: 16,
               fontFamily: 'Nunito',
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w400, // Lighter weight
             ),
           ),
         ],
