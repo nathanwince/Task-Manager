@@ -15,6 +15,10 @@ const TextStyle kTitleTextStyle = TextStyle(
 );
 
 class SecondCheckout extends StatelessWidget {
+  final int userId; // Add userId as a parameter
+
+  const SecondCheckout({Key? key, required this.userId}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return _buildSection(
@@ -37,7 +41,11 @@ class SecondCheckout extends StatelessWidget {
               color: const Color(0xFF49B160),
               imagePath: "assets/images/notebook_icon.png",
               onTap: () {
-                Navigator.pushNamed(context, '/todaystask');
+                Navigator.pushNamed(
+                  context,
+                  '/todaystask',
+                  arguments: userId, // Pass the userId here
+                );
               },
             ),
           ],
@@ -45,6 +53,7 @@ class SecondCheckout extends StatelessWidget {
       ),
     );
   }
+
 
   // Helper method to build a section with consistent padding
   Widget _buildSection(Widget child) {

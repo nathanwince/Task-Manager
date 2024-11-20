@@ -1,4 +1,18 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import and_
+
+def get_daily_tasks_for_user(db: Session, user_id: int):
+    today = datetime.now().date()
+    # Ensure only tasks due today and not completed are returned
+    tasks = db.query(Task).filter(
+        and_(
+            Task.user_id == user_id,
+            Task.due_date == today,
+            Task.completed == False  # Exclude completed tasks
+        )
+    ).all()
+    return tasks
+
 from fastapi import HTTPException, status
 from api.models.task import Task
 from api.schemas.task import TaskCreate, TaskUpdate
@@ -48,9 +62,10 @@ def mark_task_complete(db: Session, task_id: int):
     if not task:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found.")
     task.completed = True
-    db.commit()
+    db.commit()  # Save the change to the database
     db.refresh(task)
     return task
+
 
 # Delete a specific task by task_id
 def delete_task(db: Session, task_id: int):
@@ -61,10 +76,19 @@ def delete_task(db: Session, task_id: int):
     db.commit()
     return {"detail": "Task deleted successfully"}
 
-# Retrieve tasks for the current day for a specific user
+# Retrieve tasks for the current day for a specific user, excluding completed tasks
 def get_daily_tasks_for_user(db: Session, user_id: int):
     today = datetime.now().date()
-    return db.query(Task).filter(Task.user_id == user_id, Task.due_date == today).all()
+    query = db.query(Task).filter(
+        and_(
+            Task.user_id == user_id,
+            Task.due_date == today,
+            Task.completed == False  # Exclude completed tasks
+        )
+    )
+    print("Generated SQL Query:", str(query))  # Debugging
+    tasks = query.all()
+    return tasks
 
 # Retrieve tasks within a specific date range for a specific user, for calendar view
 def get_tasks_by_date_range(db: Session, user_id: int, start_date: date, end_date: date):
