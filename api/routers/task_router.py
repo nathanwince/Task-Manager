@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from api.controllers import task as controller
 from api.schemas import task as schema
 from api.dependencies.database import get_db
+from sqlalchemy import cast, Date
+
 
 router = APIRouter(
     tags=['Tasks'],
@@ -87,3 +89,24 @@ def get_tasks_for_calendar(
     tasks = controller.get_tasks_by_date_range(db=db, user_id=user_id, start_date=start_date, end_date=end_date)
     return tasks
 
+@router.get("/{date}/{user_id}", response_model=List[schema.TaskOut])
+def get_tasks_for_date(
+    date: str,
+    user_id: int,
+    db: Session = Depends(get_db)
+):
+    from datetime import datetime
+    try:
+        target_date = datetime.strptime(date, "%Y-%m-%d").date()
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD.")
+
+    tasks = (
+        db.query(controller.Task)
+        .filter(
+            controller.Task.user_id == user_id,
+            cast(controller.Task.due_date, Date) == target_date,  # Match the target date
+        )
+        .all()
+    )
+    return tasks

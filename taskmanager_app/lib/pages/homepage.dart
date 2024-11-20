@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
                     _buildSection(DateDisplay()),
                     _buildSection(StreakBarWidget(userId: userId)),
                     _buildSection(UpcomingTasksWidget(userId: userId)),
-                    _buildSection(const CheckOutGridWidget()),
+                    _buildSection(CheckOutGridWidget(userId: userId)),
                     const SizedBox(height: kLargeSpacing),
                   ],
                 ),

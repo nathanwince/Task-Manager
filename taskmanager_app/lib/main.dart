@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:taskmanager_app/pages/login.dart';
-import 'pages/signup.dart'; // Add the signup page
-import 'pages/splashpage.dart';
-import 'pages/onboarding_1.dart';
-import 'pages/onboarding_2.dart';
-import 'pages/onboarding_3.dart';
-import 'pages/homepage.dart';
-import 'pages/calendar.dart';
-import 'pages/bookmarks.dart';
-import 'pages/addtask.dart';
-import 'pages/dailymotivation.dart';
-import 'pages/notes.dart';
-import 'pages/weekly_summary.dart';
-import 'pages/todays_task.dart';
+import 'package:taskmanager_app/pages/signup.dart';
+import 'package:taskmanager_app/pages/splashpage.dart';
+import 'package:taskmanager_app/pages/onboarding_1.dart';
+import 'package:taskmanager_app/pages/onboarding_2.dart';
+import 'package:taskmanager_app/pages/onboarding_3.dart';
+import 'package:taskmanager_app/pages/homepage.dart';
+import 'package:taskmanager_app/pages/calendar.dart';
+import 'package:taskmanager_app/pages/bookmarks.dart';
+import 'package:taskmanager_app/pages/addtask.dart';
+import 'package:taskmanager_app/pages/dailymotivation.dart';
+import 'package:taskmanager_app/pages/notes.dart';
+import 'package:taskmanager_app/pages/weekly_summary.dart';
+import 'package:taskmanager_app/pages/todays_task.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,12 +23,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Ensure the app dimensions remain fixed to 430x932
         return Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxWidth: 430, // Set the maximum width to 430px
-              maxHeight: 932, // Set the maximum height to 932px
+              maxWidth: 430,
+              maxHeight: 932,
             ),
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
@@ -37,14 +36,35 @@ class MyApp extends StatelessWidget {
                 primarySwatch: Colors.blue,
                 fontFamily: 'Nunito',
               ),
-              initialRoute: '/',
+              initialRoute: '/login',
               routes: {
-                '/': (context) => LoginPage(), // Default page
+                '/login': (context) => LoginPage(),
                 '/signup': (context) => SignUpPage(),
+                '/splash': (context) => SplashPage(),
                 '/onboarding1': (context) => Onboarding1(),
                 '/onboarding2': (context) => Onboarding2(),
                 '/onboarding3': (context) => Onboarding3(),
-                // Use a dynamic route for pages requiring userId
+                '/calendar': (context) => CalendarPage(),
+                '/bookmarks': (context) => BookmarksPage(),
+                '/addtask': (context) => AddTaskPage(),
+                '/dailymotivation': (context) => DailyMotivationPage(),
+                '/notes': (context) => NotesPage(),
+                '/weeklysummary': (context) => WeeklySummaryPage(),
+              },
+              onGenerateRoute: (settings) {
+                if (settings.name == '/home') {
+                  final userId = settings.arguments as int;
+                  return MaterialPageRoute(
+                    builder: (context) => HomePage(userId: userId),
+                  );
+                }
+                if (settings.name == '/todaystask') {
+                  final userId = settings.arguments as int;
+                  return MaterialPageRoute(
+                    builder: (context) => TodaysTaskPage(userId: userId),
+                  );
+                }
+                return null; // Default to null if no matching route is found
               },
             ),
           ),

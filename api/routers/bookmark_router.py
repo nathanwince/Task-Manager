@@ -10,8 +10,14 @@ router = APIRouter(
 )
 
 @router.post("/", response_model=BookmarkOut, status_code=status.HTTP_201_CREATED)
-def create_bookmark(request: BookmarkCreate, user_id: int, db: Session = Depends(get_db)):
-    return controller.create_bookmark(db=db, user_id=user_id, task_id=request.task_id, quote_id=request.quote_id)
+def create_bookmark(request: BookmarkCreate, db: Session = Depends(get_db)):
+    return controller.create_bookmark(
+        db=db, 
+        user_id=request.user_id, 
+        task_id=request.task_id, 
+        quote_id=request.quote_id
+    )
+
 
 @router.get("/{user_id}", response_model=list[BookmarkOut])
 def get_user_bookmarks(user_id: int, db: Session = Depends(get_db)):

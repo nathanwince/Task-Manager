@@ -1,87 +1,151 @@
 import 'package:flutter/material.dart';
 import '../shared/backarrow_button.dart';
 import '../shared/navbar.dart';
-import '../widgets/calendar/calendar_buttons.dart';
+import '../widgets/calendar/calendar_widget.dart';
 import '../widgets/calendar/currentday_task.dart';
+import '../services/api_services.dart';
 
-class CalendarPage extends StatelessWidget {
+class CalendarPage extends StatefulWidget {
+  @override
+  _CalendarPageState createState() => _CalendarPageState();
+}
+
+class _CalendarPageState extends State<CalendarPage> {
+  final ApiService _apiService = ApiService();
+  DateTime _selectedDate = DateTime.now();
+  List<Map<String, dynamic>> _tasksForSelectedDate = [];
+
+  // Fetch tasks for the selected date
+  Future<void> _fetchTasksForDate(DateTime date) async {
+    final formattedDate =
+        "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+    final userId = 1; // Replace with the logged-in user's ID
+
+    try {
+      final tasks = await _apiService.fetchTasksForDate(formattedDate, userId);
+      setState(() {
+        _tasksForSelectedDate = tasks;
+      });
+    } catch (e) {
+      print("Error fetching tasks for date: $e");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchTasksForDate(_selectedDate); // Fetch tasks for the current date on load
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF03174C), // Background color to match your theme
+      backgroundColor: const Color(0xFF03174C),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // Align to the left
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Back Arrow Button without padding
-          BackArrowWidget(), // Custom widget for back navigation
-
-          // Centered Calendar Text
+          const BackArrowWidget(),
           Center(
             child: Padding(
-              padding: EdgeInsets.only(bottom: 16.0), // Add space between the arrow and text
-              child: Text(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: const Text(
                 "Calendar",
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 36, // Increase font size
+                  fontSize: 36,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Nunito',
                 ),
               ),
             ),
           ),
-
-          // Calendar Widget aligned left
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: CalendarWidget(), // Use your actual calendar widget here
-          ),
-
-          // Padding above the tasks section
-          Padding(
-            padding: EdgeInsets.only(top: 40.0), // Adjust to match desired space
-          ),
-
-          // Task List Section with title aligned left
-          Padding(
-            padding: EdgeInsets.only(left: 16.0, bottom: 8.0), // Consistent padding
-            child: Align(
-              alignment: Alignment.centerLeft, // Ensure left alignment
+          // Display current month above the calendar
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
               child: Text(
-                "Tasks for Friday 5th, 2024",
-                style: TextStyle(
+                _getMonthName(_selectedDate.month),
+                style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
                   fontFamily: 'Nunito',
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
-
-          // Adjusted Space Between the Text and Task Buttons
-          SizedBox(height: 4.0),
-
-          // Task Buttons aligned left
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: CalendarWidget(
+              onDateSelected: (selectedDate) {
+                setState(() {
+                  _selectedDate = selectedDate;
+                });
+                _fetchTasksForDate(selectedDate); // Fetch tasks for the new selected date
+              },
+              selectedDate: _selectedDate,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, bottom: 8.0, top: 24.0),
+            child: Text(
+              "Tasks for ${_formatDate(_selectedDate)}",
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Nunito',
+              ),
+            ),
+          ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(left: 16.0), // Align left
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    UpcomingTasks(), // Reusing your task widget for horizontal scrolling
-                    SizedBox(width: 8.0), // Padding between tasks if needed
-                  ],
-                ),
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: CurrentDayTask(tasks: _tasksForSelectedDate),
             ),
           ),
-
-          // Navbar at the bottom
           Navbar(),
         ],
       ),
     );
+  }
+
+  // Format date for display
+  String _formatDate(DateTime date) {
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
+    final monthName = months[date.month - 1];
+    return "$monthName ${date.day}, ${date.year}";
+  }
+
+  // Get the name of the month
+  String _getMonthName(int month) {
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
+    return months[month - 1];
   }
 }
