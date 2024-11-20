@@ -4,6 +4,7 @@ from api.controllers.auth import create_user as create_user_controller, authenti
 from api.controllers.user import get_user_progress
 from api.dependencies.database import get_db
 from api.models.user import User
+from api.models.task import Task
 from api.schemas.user import UserCreate, UserLogin, UserProgress, UserOut, UserUpdate
 from passlib.context import CryptContext
 
@@ -66,4 +67,28 @@ def login_user(user: UserLogin, db: Session = Depends(get_db)):
         "streak_count": db_user.streak_count,
         "longest_streak": db_user.longest_streak,
         "tasks_completed": db_user.tasks_completed,
+    }
+
+
+# Fetch profile stats for the user
+@router.get("/{user_id}/profile", response_model=dict)
+def get_user_profile(user_id: int, db: Session = Depends(get_db)):
+    # Fetch the user
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    # Dynamically calculate the number of completed tasks
+    tasks_completed = db.query(Task).filter(Task.user_id == user_id, Task.completed == True).count()
+
+    # Other stats
+    longest_streak = user.longest_streak  # Assuming this is in the User model
+    account_created = user.created_at.strftime("%Y-%m-%d")  # Format the account creation date
+
+    # Return the data as a dictionary
+    return {
+        "name": user.name,
+        "account_created": account_created,
+        "tasks_completed": tasks_completed,
+        "longest_streak": longest_streak,
     }

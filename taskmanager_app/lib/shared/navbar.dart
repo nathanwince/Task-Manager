@@ -28,7 +28,7 @@ class Navbar extends StatelessWidget {
           _buildIconButton(context, "assets/images/calendar_icon.png", kIconSizeMedium, '/calendar'),
           _buildIconButton(context, "assets/images/add_icon.png", kIconSizeLarge, '/addtask'),
           _buildIconButton(context, "assets/images/stats_icon.png", kIconSizeSmall, null),
-          _buildIconButton(context, "assets/images/profile_icon.png", kIconSizeSmall, null),
+          _buildIconButton(context, "assets/images/profile_icon.png", kIconSizeSmall, '/profile'),
         ],
       ),
     );
