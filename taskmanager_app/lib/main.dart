@@ -13,6 +13,8 @@ import 'package:taskmanager_app/pages/dailymotivation.dart';
 import 'package:taskmanager_app/pages/notes.dart';
 import 'package:taskmanager_app/pages/weekly_summary.dart';
 import 'package:taskmanager_app/pages/todays_task.dart';
+import 'package:taskmanager_app/pages/profile.dart'; // Import the profile page
+
 
 void main() {
   runApp(MyApp());
@@ -50,6 +52,8 @@ class MyApp extends StatelessWidget {
                 '/dailymotivation': (context) => DailyMotivationPage(),
                 '/notes': (context) => NotesPage(),
                 '/weeklysummary': (context) => WeeklySummaryPage(),
+                '/profile': (context) => ProfilePage(), // Add the profile page route
+
               },
               onGenerateRoute: (settings) {
                 if (settings.name == '/home') {
