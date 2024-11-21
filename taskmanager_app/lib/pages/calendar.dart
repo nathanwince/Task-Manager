@@ -6,6 +6,10 @@ import '../widgets/calendar/currentday_task.dart';
 import '../services/api_services.dart';
 
 class CalendarPage extends StatefulWidget {
+  final int userId; // Accept userId as a parameter
+
+  const CalendarPage({Key? key, required this.userId}) : super(key: key);
+
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
@@ -19,10 +23,9 @@ class _CalendarPageState extends State<CalendarPage> {
   Future<void> _fetchTasksForDate(DateTime date) async {
     final formattedDate =
         "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-    final userId = 1; // Replace with the logged-in user's ID
 
     try {
-      final tasks = await _apiService.fetchTasksForDate(formattedDate, userId);
+      final tasks = await _apiService.fetchTasksForDate(formattedDate, widget.userId); // Use widget.userId
       setState(() {
         _tasksForSelectedDate = tasks;
       });
@@ -104,7 +107,7 @@ class _CalendarPageState extends State<CalendarPage> {
               child: CurrentDayTask(tasks: _tasksForSelectedDate),
             ),
           ),
-          Navbar(),
+          Navbar(userId: widget.userId), // Pass userId to Navbar
         ],
       ),
     );

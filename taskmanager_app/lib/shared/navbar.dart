@@ -8,6 +8,10 @@ const Color kNavbarBackgroundColor = Color(0xFF1D2550);
 const Color kNavbarBorderColor = Color(0xFF303B75);
 
 class Navbar extends StatelessWidget {
+  final int userId; // Accept the userId dynamically
+
+  const Navbar({Key? key, required this.userId}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,18 +28,18 @@ class Navbar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildIconButton(context, "assets/images/home_icon.png", kIconSizeMedium, '/home'),
-          _buildIconButton(context, "assets/images/calendar_icon.png", kIconSizeMedium, '/calendar'),
-          _buildIconButton(context, "assets/images/add_icon.png", kIconSizeLarge, '/addtask'),
-          _buildIconButton(context, "assets/images/stats_icon.png", kIconSizeSmall, null),
-          _buildIconButton(context, "assets/images/profile_icon.png", kIconSizeSmall, '/profile'),
+          _buildIconButton(context, "assets/images/home_icon.png", kIconSizeMedium, '/home', userId),
+          _buildIconButton(context, "assets/images/calendar_icon.png", kIconSizeMedium, '/calendar', userId),
+          _buildIconButton(context, "assets/images/add_icon.png", kIconSizeLarge, '/addtask', userId),
+          _buildIconButton(context, "assets/images/stats_icon.png", kIconSizeSmall, null, null),
+          _buildIconButton(context, "assets/images/profile_icon.png", kIconSizeSmall, '/profile', userId),
         ],
       ),
     );
   }
 
   // Helper function to build an IconButton with the specified path, size, and navigation route
-  Widget _buildIconButton(BuildContext context, String assetPath, double iconSize, String? route) {
+  Widget _buildIconButton(BuildContext context, String assetPath, double iconSize, String? route, int? userId) {
     return IconButton(
       icon: Image.asset(
         assetPath,
@@ -43,7 +47,15 @@ class Navbar extends StatelessWidget {
         height: iconSize,
       ),
       onPressed: route != null
-          ? () => Navigator.pushNamed(context, route)
+          ? () {
+              if (userId != null) {
+                // Navigate to routes with userId
+                Navigator.pushNamed(context, route, arguments: userId);
+              } else {
+                // Navigate to routes without userId
+                Navigator.pushNamed(context, route);
+              }
+            }
           : null, // Keep as null if no route is provided
     );
   }

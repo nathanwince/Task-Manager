@@ -161,7 +161,28 @@ Future<Map<String, dynamic>> fetchUserProgress(int userId) async {
   }
 }
 
-  
+  // Method to create a task
+Future<Map<String, dynamic>> createTask(Map<String, dynamic> taskData) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/tasks/tasks/'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(taskData),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return {"success": true, "data": jsonDecode(response.body)};
+      } else {
+        final error = jsonDecode(response.body);
+        return {"success": false, "message": error['detail'] ?? 'Error occurred'};
+      }
+    } catch (e) {
+      print("Error in createTask: $e");
+      return {"success": false, "message": 'Failed to create task. Please try again later.'};
+    }
+  }
   // Update task status
 Future<void> updateTaskStatus(int taskId, bool isCompleted) async {
   final url = Uri.parse('http://localhost:8000/tasks/tasks/$taskId/complete');
@@ -210,9 +231,10 @@ Future<void> updateTaskStatus(int taskId, bool isCompleted) async {
     }
   }
 
- // Fetch user profile data
-  Future<Map<String, dynamic>> fetchUserProfile(int userId) async {
-    final url = Uri.parse('$baseUrl/users/$userId/profile');
+// Fetch User Profile Data
+Future<Map<String, dynamic>> fetchUserProfile(int userId) async {
+  final url = Uri.parse('$baseUrl/users/$userId/profile');
+  try {
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -220,8 +242,13 @@ Future<void> updateTaskStatus(int taskId, bool isCompleted) async {
     } else {
       throw Exception('Failed to fetch profile data: ${response.statusCode}');
     }
+  } catch (e) {
+    print('Error fetching profile data: $e');
+    rethrow;
   }
-  
+}
+
+
    // Bookmark a quote
 Future<bool> bookmarkQuote(int userId, int? taskId, int? quoteId) async {
   final url = Uri.parse('$baseUrl/bookmarks/');

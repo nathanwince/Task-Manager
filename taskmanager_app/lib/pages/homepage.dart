@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: Navbar(),
+      bottomNavigationBar: Navbar(userId: userId),
     );
   }
 

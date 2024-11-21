@@ -1,129 +1,73 @@
 import 'package:flutter/material.dart';
 import '../shared/backarrow_button.dart';
-import '../widgets/bookmarks/bookmark_tasks.dart';
 import '../shared/navbar.dart';
+import '../widgets/bookmarks/bookmark_tasks.dart';
 import '../widgets/bookmarks/tips.dart';
 
 class BookmarksPage extends StatelessWidget {
+  final int userId;
+
+  const BookmarksPage({Key? key, required this.userId}) : super(key: key);
+  
+  Future<List<Map<String, dynamic>>> fetchBookmarks(int userId) async {
+    // Simulate fetching bookmarks from API
+    await Future.delayed(const Duration(seconds: 2));
+    return [
+      {'title': 'Finish Report', 'time': '2:00 PM'},
+      {'title': 'Practice Guitar', 'time': '4:00 PM'},
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF03174C), // Match background color with theme
+      backgroundColor: const Color(0xFF03174C),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // Align content to the left
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Back Arrow Button
-          BackArrowWidget(), // Custom widget for back navigation
-
-          // Centered Bookmarks Text
+          const BackArrowWidget(),
           Center(
             child: Padding(
-              padding: EdgeInsets.only(bottom: 16.0), // Add space between the arrow and text
-              child: Text(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: const Text(
                 "Bookmarks",
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 36, // Increase font size
+                  fontSize: 36,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Nunito',
                 ),
               ),
             ),
           ),
-
-          // Tips Section Title with Heart Icon
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // Adjust padding as needed
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Tips",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Nunito',
-                  ),
-                ),
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/heart.png"), // Replace with your heart icon path
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Tips Section aligned left
-          Padding(
+          const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Tips(), // Your custom widget for Tips
+            child: Tips(),
           ),
-
-          // Padding above the Tasks section
-          Padding(
-            padding: EdgeInsets.only(top: 60.0), // Reduce space
-          ),
-
-          // Task List Section Title with Heart Icon
-          Padding(
-            padding: EdgeInsets.only(left: 16.0, bottom: 4.0), // Adjust padding
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Tasks",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontFamily: 'Nunito',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  child: Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/images/heart.png"), // Replace with your heart icon path
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Reduced Space Between the Text and Task Buttons
-          SizedBox(height: 8.0), // Adjust this to control the spacing
-
-          // Task Buttons aligned left
+          const SizedBox(height: 30.0),
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(left: 16.0), // Align left
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    BookmarkTasks(), // Reusing your task widget for horizontal scrolling
-                    SizedBox(width: 8.0), // Padding between tasks if needed
-                  ],
-                ),
-              ),
+            child: FutureBuilder<List<Map<String, dynamic>>>(
+              future: fetchBookmarks(userId),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text("Error loading bookmarks"));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text("No bookmarks found"));
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: BookmarkTasks(userId: userId, bookmarks: snapshot.data!),
+                    ),
+                  );
+                }
+              },
             ),
           ),
-
-          // Navbar at the bottom
-          Navbar(),
+          Navbar(userId: userId),
         ],
       ),
     );

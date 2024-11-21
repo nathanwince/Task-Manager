@@ -15,44 +15,51 @@ const TextStyle kNoteLabelTextStyle = TextStyle(
 );
 
 class Note extends StatelessWidget {
+  final ValueChanged<String>? onTitleChanged; // Callback for title change
+  final ValueChanged<String>? onDescriptionChanged; // Callback for description change
+
+  const Note({
+    Key? key,
+    this.onTitleChanged,
+    this.onDescriptionChanged,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // "Note" label with padding
-        Padding(
-          padding: const EdgeInsets.only(left: kNotePaddingHorizontal, bottom: kNotePaddingBottom),
-          child: const Text("Note", style: kNoteLabelTextStyle),
-        ),
-
-        // Note input container
+        // "Title" field
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: kNotePaddingHorizontal),
-          child: Container(
-            width: double.infinity,
-            height: kNoteHeight,
-            decoration: ShapeDecoration(
-              color: kNoteBackgroundColor,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(width: 1, color: kNoteBorderColor),
+          child: TextField(
+            decoration: InputDecoration(
+              labelText: 'Title',
+              labelStyle: kNoteLabelTextStyle,
+              border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide(color: kNoteBorderColor),
               ),
-              shadows: [
-                const BoxShadow(
-                  color: Color(0x66F1F5F9),
-                  blurRadius: 0,
-                  offset: Offset(4, 4),
-                  spreadRadius: 0,
-                ),
-                const BoxShadow(
-                  color: Color(0x99F1F5F9),
-                  blurRadius: 4,
-                  offset: Offset(0, 4),
-                  spreadRadius: 0,
-                ),
-              ],
             ),
+            onChanged: onTitleChanged,
+          ),
+        ),
+        const SizedBox(height: kNotePaddingBottom),
+
+        // "Description" field
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: kNotePaddingHorizontal),
+          child: TextField(
+            decoration: InputDecoration(
+              labelText: 'Description',
+              labelStyle: kNoteLabelTextStyle,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide(color: kNoteBorderColor),
+              ),
+            ),
+            maxLines: 3,
+            onChanged: onDescriptionChanged,
           ),
         ),
       ],

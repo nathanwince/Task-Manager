@@ -55,8 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Back Arrow Button
-                  BackArrowWidget(),
+                  const BackArrowWidget(),
 
                   const SizedBox(height: 20),
 
@@ -88,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ),
-      bottomNavigationBar: Navbar(), // Bottom navigation bar
+      bottomNavigationBar: Navbar(userId: widget.userId), // Pass userId to Navbar
     );
   }
 }

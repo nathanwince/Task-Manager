@@ -11,9 +11,22 @@ const TextStyle kDateTextStyle = TextStyle(
   height: 1.2,
 );
 
-class Dates extends StatelessWidget {
+class Dates extends StatefulWidget {
+  final Function(DateTime) onDateSelected; // Callback to send the selected date
+
+  const Dates({Key? key, required this.onDateSelected}) : super(key: key);
+
+  @override
+  _DatesState createState() => _DatesState();
+}
+
+class _DatesState extends State<Dates> {
+  DateTime _selectedDate = DateTime.now(); // Default to today's date
+
   @override
   Widget build(BuildContext context) {
+    final List<DateTime> daysInWeek = _getCurrentWeekDates();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -36,15 +49,21 @@ class Dates extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildDateColumn("Mo\n3"),
-              _buildDateColumn("Tu\n4", selected: true),
-              _buildDateColumn("We\n5"),
-              _buildDateColumn("Th\n6"),
-              _buildDateColumn("Fr\n7"),
-              _buildDateColumn("Sa\n8"),
-              _buildDateColumn("Su\n9"),
-            ],
+            children: daysInWeek.map((date) {
+              final bool isSelected = _isSameDay(_selectedDate, date);
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedDate = date; // Update the selected date
+                  });
+                  widget.onDateSelected(date); // Notify parent of selection
+                },
+                child: _buildDateColumn(
+                  "${_getDayOfWeek(date)}\n${date.day}",
+                  selected: isSelected,
+                ),
+              );
+            }).toList(),
           ),
         ),
       ],
@@ -67,5 +86,27 @@ class Dates extends StatelessWidget {
         style: kDateTextStyle,
       ),
     );
+  }
+
+  // Get the current week dates
+  List<DateTime> _getCurrentWeekDates() {
+    final DateTime now = DateTime.now();
+    final int weekday = now.weekday;
+    return List.generate(7, (index) {
+      return now.subtract(Duration(days: weekday - index - 1));
+    });
+  }
+
+  // Check if two dates are the same day
+  bool _isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
+  }
+
+  // Get the day of the week abbreviation
+  String _getDayOfWeek(DateTime date) {
+    const daysOfWeek = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+    return daysOfWeek[date.weekday - 1];
   }
 }

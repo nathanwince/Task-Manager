@@ -1,35 +1,39 @@
 import 'package:flutter/material.dart';
 
-const double kSelectTimeContainerHeight = 88.0;
-const double kHorizontalPadding = 16.0;
-const double kVerticalSpacing = 4.0;
-const Color kSelectTimeBackgroundColor = Color(0xFFF1F5F9);
-const Color kSelectTimeBorderColor = Color(0xFF6C7EA0);
-const Color kTimeTextColor = Color(0xFF1E293B);
-const Color kLabelTextColor = Color(0xFF94A3B8);
+class SelectTime extends StatefulWidget {
+  final Function(TimeOfDay from, TimeOfDay to)? onTimeSelected; // Callback to pass selected times
 
-const TextStyle kLabelTextStyle = TextStyle(
-  color: kLabelTextColor,
-  fontSize: 12,
-  fontFamily: 'Nunito',
-  fontWeight: FontWeight.w900,
-);
+  const SelectTime({Key? key, this.onTimeSelected}) : super(key: key);
 
-const TextStyle kTimeTextStyle = TextStyle(
-  color: kTimeTextColor,
-  fontSize: 24,
-  fontFamily: 'Nunito',
-  fontWeight: FontWeight.w800,
-);
+  @override
+  _SelectTimeState createState() => _SelectTimeState();
+}
 
-const TextStyle kAmPmTextStyle = TextStyle(
-  color: kTimeTextColor,
-  fontSize: 16,
-  fontFamily: 'Nunito',
-  fontWeight: FontWeight.w800,
-);
+class _SelectTimeState extends State<SelectTime> {
+  TimeOfDay? _fromTime;
+  TimeOfDay? _toTime;
 
-class SelectTime extends StatelessWidget {
+  Future<void> _selectTime(BuildContext context, bool isFromTime) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: isFromTime ? (_fromTime ?? TimeOfDay.now()) : (_toTime ?? TimeOfDay.now()),
+    );
+    if (picked != null) {
+      setState(() {
+        if (isFromTime) {
+          _fromTime = picked;
+        } else {
+          _toTime = picked;
+        }
+      });
+
+      // Pass the selected times back to the parent widget
+      if (widget.onTimeSelected != null) {
+        widget.onTimeSelected!(_fromTime ?? TimeOfDay.now(), _toTime ?? TimeOfDay.now());
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -37,7 +41,7 @@ class SelectTime extends StatelessWidget {
       children: [
         // "Select time" label
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: kHorizontalPadding, vertical: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: const Text(
             "Select time",
             style: TextStyle(
@@ -51,42 +55,32 @@ class SelectTime extends StatelessWidget {
 
         // Time selection container
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: kHorizontalPadding),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Container(
             width: double.infinity,
-            height: kSelectTimeContainerHeight,
-            decoration: ShapeDecoration(
-              color: kSelectTimeBackgroundColor,
-              shape: RoundedRectangleBorder(
-                side: const BorderSide(width: 1, color: kSelectTimeBorderColor),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              shadows: const [
-                BoxShadow(
-                  color: Color(0x66F1F5F9),
-                  blurRadius: 0,
-                  offset: Offset(4, 4),
-                  spreadRadius: 0,
-                ),
-                BoxShadow(
-                  color: Color(0x99F1F5F9),
-                  blurRadius: 4,
-                  offset: Offset(0, 4),
-                  spreadRadius: 0,
-                ),
-              ],
+            height: 88.0,
+            decoration: BoxDecoration(
+              color: const Color(0xFFF1F5F9),
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(width: 1, color: const Color(0xFF6C7EA0)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 // "From" time
-                _buildTimeColumn("From", "12:00", "am"),
-                
+                GestureDetector(
+                  onTap: () => _selectTime(context, true),
+                  child: _buildTimeColumn("From", _fromTime),
+                ),
+
                 // Divider arrow
-                const Text('>', style: kTimeTextStyle),
+                const Text('>', style: TextStyle(color: Color(0xFF1E293B), fontSize: 24, fontWeight: FontWeight.bold)),
 
                 // "To" time
-                _buildTimeColumn("To", "11:59", "pm"),
+                GestureDetector(
+                  onTap: () => _selectTime(context, false),
+                  child: _buildTimeColumn("To", _toTime),
+                ),
               ],
             ),
           ),
@@ -95,21 +89,17 @@ class SelectTime extends StatelessWidget {
     );
   }
 
-  // Helper to build time column with label, time, and am/pm
-  Widget _buildTimeColumn(String label, String time, String period) {
+  // Helper to build time column with label and time
+  Widget _buildTimeColumn(String label, TimeOfDay? time) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(label, style: kLabelTextStyle),
-        const SizedBox(height: kVerticalSpacing),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(time, style: kTimeTextStyle),
-            const SizedBox(width: kVerticalSpacing),
-            Text(period, style: kAmPmTextStyle),
-          ],
+        Text(label, style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 12, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 4.0),
+        Text(
+          time != null ? time.format(context) : '--:--',
+          style: const TextStyle(color: Color(0xFF1E293B), fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ],
     );

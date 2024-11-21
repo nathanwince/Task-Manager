@@ -15,10 +15,10 @@ class MainContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add horizontal padding
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(16.0), // Padding inside the container
+        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
           color: const Color(0xFFE2F2FF),
           borderRadius: BorderRadius.circular(30),
@@ -38,27 +38,24 @@ class MainContent extends StatelessWidget {
         ),
         child: Column(
           children: [
-            // Account Created Section
             _buildStatItem(
               imagePath: "assets/images/crown.png",
               title: 'Account Created',
-              subtitle: 'Joined $accountCreated', // Dynamic account created date
+              subtitle: 'Joined $accountCreated',
             ),
-            const Divider(color: Color(0xFF94BDD9), thickness: 1.5), // Divider
+            const Divider(color: Color(0xFF94BDD9), thickness: 1.5),
 
-            // Task Completed Section
             _buildStatItem(
               imagePath: "assets/images/taskscompleted.png",
               title: 'Task Completed',
-              subtitle: '$tasksCompleted Tasks', // Dynamic tasks completed
+              subtitle: '$tasksCompleted Tasks',
             ),
-            const Divider(color: Color(0xFF94BDD9), thickness: 1.5), // Divider
+            const Divider(color: Color(0xFF94BDD9), thickness: 1.5),
 
-            // Longest Streak Section
             _buildStatItem(
               imagePath: "assets/images/fire.png",
               title: 'Longest Streak',
-              subtitle: '$longestStreak Days', // Dynamic longest streak
+              subtitle: '$longestStreak Days',
             ),
           ],
         ),
@@ -66,35 +63,31 @@ class MainContent extends StatelessWidget {
     );
   }
 
-  // Helper method to build individual stat items
   Widget _buildStatItem({
     required String imagePath,
     required String title,
     required String subtitle,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0), // Space between items
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Image
           Padding(
-            padding: const EdgeInsets.only(left: 24.0), // Add left padding for logo
+            padding: const EdgeInsets.only(left: 24.0),
             child: Container(
-              width: 80, // Adjusted logo size
+              width: 80,
               height: 80,
               child: Image.asset(
                 imagePath,
-                fit: BoxFit.contain, // Ensure the entire logo is visible
+                fit: BoxFit.contain,
               ),
             ),
           ),
           const SizedBox(width: 16),
-
-          // Title and Subtitle
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(right: 24.0), // Add right padding for text
+              padding: const EdgeInsets.only(right: 24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

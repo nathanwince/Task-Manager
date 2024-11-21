@@ -5,6 +5,10 @@ import '/pages/notes.dart'; // Import the Notes page
 import '/pages/bookmarks.dart'; // Import the Bookmarks page
 
 class MotivationHolder extends StatelessWidget {
+  final int userId; // Accept the user ID dynamically
+
+  const MotivationHolder({Key? key, required this.userId}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -23,20 +27,20 @@ class MotivationHolder extends StatelessWidget {
           Container(
             width: double.infinity, // Use full width for responsiveness
             decoration: BoxDecoration(
-              color: Color(0xFFE2F2FF),
+              color: const Color(0xFFE2F2FF),
               borderRadius: BorderRadius.circular(30),
-              border: Border.all(width: 1, color: Color(0xFF6C7EA0)),
+              border: Border.all(width: 1, color: const Color(0xFF6C7EA0)),
               boxShadow: [
                 BoxShadow(
-                  color: Color(0x66E2F2FF),
+                  color: const Color(0x66E2F2FF),
                   blurRadius: 0,
-                  offset: Offset(4, 4),
+                  offset: const Offset(4, 4),
                   spreadRadius: 0,
                 ),
                 BoxShadow(
-                  color: Color(0x99E2F2FF),
+                  color: const Color(0x99E2F2FF),
                   blurRadius: 4,
-                  offset: Offset(0, 4),
+                  offset: const Offset(0, 4),
                   spreadRadius: 0,
                 ),
               ],
@@ -67,7 +71,7 @@ class MotivationHolder extends StatelessWidget {
                   title: 'Bookmarks',
                   description: 'Save your favorite tips and important tasks',
                   imageUrl: 'assets/images/bookmark.png',
-                  destination: BookmarksPage(), // Navigate to Bookmarks
+                  destination: BookmarksPage(userId: userId), // Pass the userId to BookmarksPage
                 ),
               ],
             ),
@@ -112,7 +116,7 @@ class MotivationHolder extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF1CB0F6),
                       fontSize: 24,
                       fontFamily: 'Nunito',
@@ -122,7 +126,7 @@ class MotivationHolder extends StatelessWidget {
                   ),
                   Text(
                     description,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF9D9D9D),
                       fontSize: 16,
                       fontFamily: 'Inter',
@@ -143,7 +147,7 @@ class MotivationHolder extends StatelessWidget {
     return Container(
       width: double.infinity, // Use full width for the divider
       height: 1.71,
-      color: Color(0xFF94BDD9),
+      color: const Color(0xFF94BDD9),
     );
   }
 }

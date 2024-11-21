@@ -23,7 +23,6 @@ class WeeklySummaryPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Navbar(), // Navbar at the bottom
     );
   }
 }
