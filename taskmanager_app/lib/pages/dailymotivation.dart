@@ -1,44 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../shared/backarrow_button.dart';
 import '../shared/navbar.dart';
-import '../widgets/daily_motivation/motivation_container.dart'; 
 import '../widgets/daily_motivation/motivation_tip.dart';
 import '../widgets/daily_motivation/motivation_title.dart';
+import '../liked_quotes_provider.dart';
 
 const Color kBackgroundColor = Color(0xFF03174C);
 const double kSectionSpacing = 16.0;
 
 class DailyMotivationPage extends StatelessWidget {
-  final int userId; // Accept userId dynamically
+  final int userId;
 
   const DailyMotivationPage({Key? key, required this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final likedQuotesProvider = context.read<LikedQuotesProvider>();
+    const String currentQuote = "This is today's motivational quote!"; // Example quote
+
     return Scaffold(
       backgroundColor: kBackgroundColor,
-      body: SingleChildScrollView( // Enable vertical scrolling
+      body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // Align to the left
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Back Arrow Button (no need for additional padding here)
-            BackArrowWidget(), // Custom widget for back navigation
-
-            // Centered Motivation Title
-            Center(child: MotivationTitle()), // Center the title horizontally
-
-            // Motivation Tip
-            Center(child: MotivationTip()), // Center the tip horizontally
-
-            // Motivation Holder
-            Center(child: MotivationHolder(userId: userId)), // Center the holder horizontally
-
-            // Optionally, add more spacing before the Navbar
-            SizedBox(height: kSectionSpacing),
+            const BackArrowWidget(),
+            const Center(child: MotivationTitle()),
+            Center(
+              child: MotivationTip(
+                quote: currentQuote,
+                onHeartPressed: () {
+                  likedQuotesProvider.addQuote(currentQuote);
+                },
+              ),
+            ),
           ],
         ),
       ),
-      bottomNavigationBar: Navbar(userId: userId), // Use bottomNavigationBar instead of placing it in the Column
+      bottomNavigationBar: Navbar(userId: userId),
     );
   }
 }

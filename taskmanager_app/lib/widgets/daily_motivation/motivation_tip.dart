@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 
 class MotivationTip extends StatelessWidget {
+  final String quote; // The quote to display
+  final VoidCallback onHeartPressed; // Callback for heart icon press
+
+  const MotivationTip({
+    Key? key,
+    required this.quote,
+    required this.onHeartPressed,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0), // Add padding for top and horizontal alignment
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center, // Center horizontally
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 40), // Space above the title
-          Text(
+          const Text(
             'Tip of the day',
             style: TextStyle(
               color: Colors.white,
@@ -21,13 +30,13 @@ class MotivationTip extends StatelessWidget {
           ),
           const SizedBox(height: 16), // Space between title and container
           Container(
-            width: double.infinity, // Use full width for responsiveness
+            width: double.infinity,
             height: 60,
             decoration: BoxDecoration(
-              color: Color(0xFF1CB0F6),
+              color: const Color(0xFF1CB0F6),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(width: 1, color: Color(0xFF10609E)),
-              boxShadow: [
+              border: Border.all(width: 1, color: const Color(0xFF10609E)),
+              boxShadow: const [
                 BoxShadow(
                   color: Color(0x661CB0F6),
                   blurRadius: 0,
@@ -42,17 +51,28 @@ class MotivationTip extends StatelessWidget {
                 ),
               ],
             ),
-            child: Center(
-              child: Text(
-                'Dedication makes dreams come true.',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 0.30,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      quote,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 0.30,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                IconButton(
+                  onPressed: onHeartPressed,
+                  icon: const Icon(Icons.favorite, color: Colors.red),
+                ),
+              ],
             ),
           ),
         ],

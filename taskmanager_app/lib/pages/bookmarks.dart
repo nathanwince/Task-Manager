@@ -1,75 +1,86 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../shared/backarrow_button.dart';
 import '../shared/navbar.dart';
-import '../widgets/bookmarks/bookmark_tasks.dart';
 import '../widgets/bookmarks/tips.dart';
 
-class BookmarksPage extends StatelessWidget {
-  final int userId;
+const Color kBackgroundColor = Color(0xFF03174C);
+const double kSectionSpacing = 16.0;
 
-  const BookmarksPage({Key? key, required this.userId}) : super(key: key);
-  
-  Future<List<Map<String, dynamic>>> fetchBookmarks(int userId) async {
-    // Simulate fetching bookmarks from API
-    await Future.delayed(const Duration(seconds: 2));
-    return [
-      {'title': 'Finish Report', 'time': '2:00 PM'},
-      {'title': 'Practice Guitar', 'time': '4:00 PM'},
-    ];
-  }
+class BookmarksPage extends StatelessWidget {
+  const BookmarksPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final likedQuotes = context.watch<LikedQuotesProvider>().likedQuotes;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF03174C),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const BackArrowWidget(),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: const Text(
-                "Bookmarks",
-                style: TextStyle(
+      backgroundColor: kBackgroundColor,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const BackArrowWidget(),
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: kSectionSpacing),
+                child: Text(
+                  "Bookmarks",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Nunito',
+                  ),
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: kSectionSpacing),
+              child: Tips(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: kSectionSpacing, vertical: 8.0),
+              child: Text(
+                "Liked Quotes",
+                style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 36,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Nunito',
                 ),
               ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Tips(),
-          ),
-          const SizedBox(height: 30.0),
-          Expanded(
-            child: FutureBuilder<List<Map<String, dynamic>>>(
-              future: fetchBookmarks(userId),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text("Error loading bookmarks"));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text("No bookmarks found"));
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: BookmarkTasks(userId: userId, bookmarks: snapshot.data!),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: kSectionSpacing),
+              child: likedQuotes.isEmpty
+                  ? const Text(
+                      "No quotes liked yet.",
+                      style: TextStyle(color: Colors.white),
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: likedQuotes
+                          .map(
+                            (quote) => Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Text(
+                                quote,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontFamily: 'Nunito',
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList(),
                     ),
-                  );
-                }
-              },
             ),
-          ),
-          Navbar(userId: userId),
-        ],
+          ],
+        ),
       ),
+      bottomNavigationBar: const Navbar(),
     );
   }
 }
