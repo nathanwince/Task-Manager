@@ -210,6 +210,18 @@ Future<void> updateTaskStatus(int taskId, bool isCompleted) async {
     }
   }
 
+ // Fetch user profile data
+  Future<Map<String, dynamic>> fetchUserProfile(int userId) async {
+    final url = Uri.parse('$baseUrl/users/$userId/profile');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body); // Parse and return the JSON data
+    } else {
+      throw Exception('Failed to fetch profile data: ${response.statusCode}');
+    }
+  }
+  
    // Bookmark a quote
 Future<bool> bookmarkQuote(int userId, int? taskId, int? quoteId) async {
   final url = Uri.parse('$baseUrl/bookmarks/');
