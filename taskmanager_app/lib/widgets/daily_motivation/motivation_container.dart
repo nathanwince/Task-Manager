@@ -1,25 +1,32 @@
 import 'package:flutter/material.dart';
-import 'motivation_viewtext.dart'; // Make sure this widget is correctly implemented
-import '/pages/weekly_summary.dart'; // Import the Weekly Summary page
-import '/pages/notes.dart'; // Import the Notes page
-import '/pages/bookmarks.dart'; // Import the Bookmarks page
+import '/pages/weekly_summary.dart'; // Import Weekly Summary
+import '/pages/notes.dart'; // Import Notes
+import '/pages/bookmarks.dart'; // Import Bookmarks
+import '/pages/bookmarks_copy.dart'; // Import BookmarksPage2
 
 class MotivationHolder extends StatelessWidget {
-   final int userId; // Accept the user ID dynamically
+  final int userId; // Accept the user ID dynamically
 
   const MotivationHolder({Key? key, required this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0), // Top and horizontal alignment
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // Align items to the left
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // View Text wrapped in a Container for alignment
           Container(
             width: double.infinity, // Use full width for alignment
-            child: ViewWidget(), // Use the View widget
+            child: const Text(
+              "View",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
           const SizedBox(height: 16), // Space between "View" text and the container
 
@@ -66,12 +73,13 @@ class MotivationHolder extends StatelessWidget {
                 ),
                 _buildDivider(),
                 // Bookmarks section
-                _buildSection(
+                _buildBookmarksSection(
                   context,
                   title: 'Bookmarks',
                   description: 'Save your favorite tips and important tasks',
                   imageUrl: 'assets/images/bookmark.png',
-                  destination: BookmarksPage(userId: userId), // Pass the userId to BookmarksPage
+                  destination1: BookmarksPage(userId: userId), // Navigate to BookmarksPage1
+                  destination2: BookmarksPage2(userId: userId,), // Navigate to BookmarksPage2
                 ),
               ],
             ),
@@ -81,11 +89,12 @@ class MotivationHolder extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(BuildContext context, {
-    required String title, 
-    required String description, 
-    required String imageUrl, 
-    required Widget destination, // Add destination parameter
+  Widget _buildSection(
+    BuildContext context, {
+    required String title,
+    required String description,
+    required String imageUrl,
+    required Widget destination,
   }) {
     return GestureDetector(
       onTap: () {
@@ -139,6 +148,78 @@ class MotivationHolder extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildBookmarksSection(
+    BuildContext context, {
+    required String title,
+    required String description,
+    required String imageUrl,
+    required Widget destination1, // Destination for bookmark icon
+    required Widget destination2, // Destination for description text
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: Row(
+        children: [
+          // Image container for bookmark
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => destination1), // Navigate to BookmarksPage1
+              );
+            },
+            child: Container(
+              width: 107,
+              height: 107,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(imageUrl), // Use AssetImage for local assets
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 16), // Space between image and text
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => destination2), // Navigate to BookmarksPage2
+                );
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: Color(0xFF1CB0F6),
+                      fontSize: 24,
+                      fontFamily: 'Nunito',
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.30,
+                    ),
+                  ),
+                  Text(
+                    description,
+                    style: TextStyle(
+                      color: Color(0xFF9D9D9D),
+                      fontSize: 16,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.30,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

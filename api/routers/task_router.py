@@ -15,8 +15,8 @@ router = APIRouter(
 
 # Create a new task associated with a specific user
 @router.post("/", response_model=schema.TaskOut, status_code=status.HTTP_201_CREATED)
-def create_task(request: schema.TaskCreate, user_id: int, db: Session = Depends(get_db)):
-    return controller.create_task(db=db, task=request, user_id=user_id)
+def create_task(request: schema.TaskCreateWithUserId, db: Session = Depends(get_db)):
+    return controller.create_task(db=db, task=request)
 
 # Retrieve all tasks for a specific user by user_id
 @router.get("/user/{user_id}", response_model=List[schema.TaskOut])
@@ -26,19 +26,17 @@ def get_user_tasks(user_id: int, db: Session = Depends(get_db)):
 # Retrieve tasks due today for a specific user
 @router.get("/today/{user_id}", response_model=List[schema.TaskOut])
 def get_tasks_for_today(user_id: int, db: Session = Depends(get_db)):
-    from sqlalchemy import cast, Date
-    today = date.today()  # Current date
+    today = date.today()
     tasks = (
         db.query(controller.Task)
         .filter(
             controller.Task.user_id == user_id,
-            cast(controller.Task.due_date, Date) == today,  # Compare only the date part
-            controller.Task.completed == False  # Exclude completed tasks
+            controller.Task.due_date.cast(Date) == today,  # Ensure the cast matches your database setup
+            controller.Task.completed == False
         )
         .all()
     )
     return tasks
-
 
 # Retrieve a specific task by task_id
 @router.get("/task/{task_id}", response_model=schema.TaskOut)

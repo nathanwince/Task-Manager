@@ -8,29 +8,10 @@ class MotivationTip extends StatefulWidget {
 
 class _MotivationTipState extends State<MotivationTip> {
   final ApiService apiService = ApiService();
-  String quoteText = "Loading...";
-  String quoteAuthor = "";
+  String quoteText = "Dedication makes dreams come true.";
+  String quoteAuthor = "Nate";
 
-  @override
-  void initState() {
-    super.initState();
-    _fetchDailyQuote();
-  }
-
-  Future<void> _fetchDailyQuote() async {
-    try {
-      final quote = await apiService.fetchDailyQuote();
-      setState(() {
-        quoteText = quote["text"] ?? "No quote available";
-        quoteAuthor = quote["author"] ?? "Unknown";
-      });
-    } catch (e) {
-      setState(() {
-        quoteText = "Failed to fetch quote";
-        quoteAuthor = "";
-      });
-    }
-  }
+  bool isFavorite = false; // Track favorite state
 
   @override
   Widget build(BuildContext context) {
@@ -107,12 +88,16 @@ class _MotivationTipState extends State<MotivationTip> {
                   ),
                 ),
                 // Heart Icon
-                Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  child: Image.asset(
-                    'assets/images/heart.png', // Replace with your actual heart icon path
-                    width: 24,
-                    height: 24,
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isFavorite = !isFavorite; // Toggle favorite state
+                    });
+                  },
+                  icon: Icon(
+                    isFavorite ? Icons.favorite : Icons.favorite_border, // Toggle between filled and outlined heart
+                    color: isFavorite ? Colors.red : Colors.white,
+                    size: 28,
                   ),
                 ),
               ],

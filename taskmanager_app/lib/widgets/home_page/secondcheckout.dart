@@ -10,7 +10,7 @@ class SecondCheckout extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: SizedBox(
-        height: 120.0, // Fixed height for cards
+        height: 120.0,
         child: ListView(
           scrollDirection: Axis.horizontal,
           physics: const BouncingScrollPhysics(),
@@ -20,7 +20,12 @@ class SecondCheckout extends StatelessWidget {
               color: const Color(0xFF2AACC0),
               imagePath: "assets/images/calendar_icon1.png",
               onTap: () {
-                Navigator.pushNamed(context, '/calendar');
+                print('Navigating to Calendar with userId: $userId');
+                Navigator.pushNamed(
+                  context,
+                  '/calendar',
+                  arguments: userId,
+                );
               },
             ),
             _buildCheckoutCard(
@@ -28,6 +33,7 @@ class SecondCheckout extends StatelessWidget {
               color: const Color(0xFF49B160),
               imagePath: "assets/images/notebook_icon.png",
               onTap: () {
+                print('Navigating to Today’s Tasks with userId: $userId');
                 Navigator.pushNamed(
                   context,
                   '/todaystask',
@@ -50,14 +56,14 @@ class SecondCheckout extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(right: 16.0), // Consistent spacing between cards
-        width: 190.0, // Standardized card width for all cards
+        margin: const EdgeInsets.only(right: 16.0),
+        width: 190.0,
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(16.0),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12.0), // Internal padding for card content
+          padding: const EdgeInsets.all(12.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -71,12 +77,12 @@ class SecondCheckout extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                     height: 1.5,
                   ),
-                  overflow: TextOverflow.ellipsis, // Handle long text gracefully
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               SizedBox(
                 width: 50.0,
-                height: 50.0, // Standardized image size
+                height: 50.0,
                 child: Image.asset(
                   imagePath,
                   fit: BoxFit.cover,

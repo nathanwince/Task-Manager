@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskmanager_app/pages/login.dart';
 import 'onboarding_1.dart'; // Import your onboarding page
 import '../widgets/splash_page/getstarted_button.dart'; // Import the GetStartedButton widget
 import '../widgets/splash_page/rollcall_header.dart'; // Import the RollCallHeader widget
@@ -23,7 +24,7 @@ class SplashPage extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Onboarding1()),
+            MaterialPageRoute(builder: (context) => LoginPage()),
           );
         },
       ),

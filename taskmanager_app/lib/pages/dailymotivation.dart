@@ -39,8 +39,8 @@ class DailyMotivationPage extends StatelessWidget {
           ],
         ),
       ),
-            bottomNavigationBar: Navbar(userId: userId)
-, // Use bottomNavigationBar instead of placing it in the Column
+bottomNavigationBar: Navbar(userId: userId),
+ // Use bottomNavigationBar instead of placing it in the Column
     );
   }
 }

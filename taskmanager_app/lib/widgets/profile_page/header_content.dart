@@ -29,7 +29,7 @@ class HeaderContent extends StatelessWidget {
         // Static Default Profile Picture
         CircleAvatar(
           radius: 50,
-          backgroundImage: AssetImage('assets/images/profile_pic.png'), // Static default picture
+          backgroundImage: AssetImage('assets/images/Profile Pic.png'), // Static default picture
           backgroundColor: Colors.white,
         ),
         const SizedBox(height: 16),

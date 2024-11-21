@@ -13,7 +13,7 @@ class CheckOutGridWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // First Checkout Section
-        FirstCheckout(),
+        FirstCheckout(userId: userId,),
 
         const SizedBox(height: 16), // Add spacing between sections
 

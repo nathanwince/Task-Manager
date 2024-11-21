@@ -1,124 +1,156 @@
-// import 'package:flutter/material.dart';
-// import '../widgets/add_task/header.dart';
-// import '../widgets/add_task/select_time.dart';
-// import '../widgets/add_task/category.dart'; // Renamed category to priority
-// import '../widgets/add_task/note.dart';
-// import '../widgets/add_task/save_button.dart'; // Updated SaveButton to CreateTask
-// import '../shared/navbar.dart';
+import 'package:flutter/material.dart';
+import '../widgets/add_task/header.dart';
+import '../widgets/add_task/select_time.dart';
+import '../widgets/add_task/priority.dart';
+import '../widgets/add_task/note.dart';
+import '../widgets/add_task/save_button.dart';
+import '../shared/navbar.dart';
+import '../services/api_services.dart';
 
-// const double kSectionSpacing = 16.0;
-// const double kLargeSpacing = 30.0;
-// const Color kBackgroundColor = Color(0xFF03174C);
+class AddTaskPage extends StatefulWidget {
+  final int userId;
 
-// class AddTaskPage extends StatefulWidget {
-//   final int userId; // Accept userId as a parameter
+  const AddTaskPage({Key? key, required this.userId}) : super(key: key);
 
-//   const AddTaskPage({Key? key, required this.userId}) : super(key: key);
+  @override
+  State<AddTaskPage> createState() => _AddTaskPageState();
+}
 
-//   @override
-//   _AddTaskPageState createState() => _AddTaskPageState();
-// }
+class _AddTaskPageState extends State<AddTaskPage> {
+  DateTime? _selectedDate;
+  TimeOfDay? _selectedTime;
+  String _priority = 'Low'; // Default priority
+  String _title = '';
+  String _description = '';
 
-// class _AddTaskPageState extends State<AddTaskPage> {
-//   DateTime _selectedDate = DateTime.now(); // Default to current date
-//   TimeOfDay _selectedTime = TimeOfDay.now(); // Default to now
-//   String? _priority = "2"; // Default to medium priority
-//   String _description = ''; // Task description
+  void _updateDate(DateTime date) {
+    setState(() {
+      _selectedDate = date;
+    });
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: kBackgroundColor,
-//       body: SingleChildScrollView( // Enable vertical scrolling
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             // Pass `onDateSelected` to Header
-//             Header(
-//               onDateSelected: (selectedDate) {
-//                 setState(() {
-//                   _selectedDate = selectedDate;
-//                 });
-//               },
-//             ),
-//             SizedBox(height: kSectionSpacing),
+  void _updateTime(TimeOfDay? time) {
+    setState(() {
+      _selectedTime = time;
+    });
+  }
 
-//             // Time selection section (single time selection)
-//             _buildSection(
-//               SelectTime(
-//                 onTimeSelected: (time) {
-//                   setState(() {
-//                     _selectedTime = time; // Update the selected time
-//                   });
-//                 },
-//               ),
-//             ),
+  void _updatePriority(String priority) {
+    setState(() {
+      _priority = priority;
+    });
+  }
 
-//             // Priority selection section
-//             _buildSection(
-//               Priority(
-//                 onPrioritySelected: (selectedPriority) {
-//                   setState(() {
-//                     _priority = selectedPriority.toString(); // Convert int to String
-//                   });
-//                 },
-//               ),
-//             ),
+  void _updateTitle(String title) {
+    setState(() {
+      _title = title;
+    });
+  }
 
-//             // Task description (Note section)
-//             _buildSection(
-//               Note(
-//                 onDescriptionChanged: (value) {
-//                   setState(() {
-//                     _description = value;
-//                   });
-//                 },
-//               ),
-//             ),
+  void _updateDescription(String description) {
+    setState(() {
+      _description = description;
+    });
+  }
 
-//             SizedBox(height: kLargeSpacing), // Extra space before SaveButton
+Future<void> _saveTask(BuildContext context) async {
+  if (_selectedDate == null || _selectedTime == null || _title.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please fill in all required fields.')),
+    );
+    return;
+  }
 
-//             // Save Button
-//             _buildSection(
-//               CreateTask(
-//                 userId: widget.userId, // Pass userId here
-//                 description: _description.isNotEmpty ? _description : "No description",
-//                 dueDate: DateTime(
-//                   _selectedDate.year,
-//                   _selectedDate.month,
-//                   _selectedDate.day,
-//                   _selectedTime.hour,
-//                   _selectedTime.minute,
-//                 ),
-//                 priority: int.tryParse(_priority ?? "2") ?? 2, // Default to medium priority
-//                 onTaskAdded: () {
-//                   // Callback after successful addition
-//                   ScaffoldMessenger.of(context).showSnackBar(
-//                     const SnackBar(content: Text('Task added successfully!')),
-//                   );
-//                 },
-//               ),
-//             ),
+  final dueDate = DateTime(
+    _selectedDate!.year,
+    _selectedDate!.month,
+    _selectedDate!.day,
+    _selectedTime!.hour,
+    _selectedTime!.minute,
+  );
 
-//             SizedBox(height: kLargeSpacing), // Space before Navbar
-//           ],
-//         ),
-//       ),
-//       bottomNavigationBar: Navbar(userId: widget.userId), // Pass userId to Navbar
-//     );
-//   }
+  int priorityValue = (_priority == 'High')
+      ? 1
+      : (_priority == 'Medium')
+          ? 2
+          : 3;
 
-//   // Helper function to add consistent padding and spacing to sections
-//   Widget _buildSection(Widget child) {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           child,
-//           SizedBox(height: kSectionSpacing), // Spacing between each section
-//         ],
-//       ),
-//     );
-//   }
-// }
+  final taskData = {
+    "user_id": widget.userId, // Include user_id here
+    "title": _title,
+    "description": _description,
+    "due_date": dueDate.toIso8601String(),
+    "priority": priorityValue,
+  };
+
+  try {
+    final response = await ApiService().createTask(taskData);
+    if (response['success'] == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Task added successfully!')),
+      );
+      Navigator.pop(context, true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error adding task: ${response['message']}')),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('An error occurred while adding the task.')),
+    );
+  }
+}
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF03174C),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF03174C),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: Column(
+        children: [
+          Header(onDateSelected: _updateDate),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    SelectTime(onTimeSelected: _updateTime),
+                    const SizedBox(height: 16.0),
+                    Priority(onPrioritySelected: (int priorityIndex) {
+                      _updatePriority(priorityIndex == 1
+                          ? 'High'
+                          : priorityIndex == 2
+                              ? 'Medium'
+                              : 'Low');
+                    }),
+                    const SizedBox(height: 16.0),
+                    Note(
+                      onTitleChanged: _updateTitle,
+                      onDescriptionChanged: _updateDescription,
+                    ),
+                    const SizedBox(height: 16.0),
+                    SaveButton(
+                      onSave: () => _saveTask(context),
+                      userId: widget.userId,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Navbar(userId: widget.userId),
+    );
+  }
+}

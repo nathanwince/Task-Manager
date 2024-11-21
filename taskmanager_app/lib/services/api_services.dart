@@ -51,13 +51,21 @@ class ApiService {
 
 
   // Fetch Daily Tasks
- Future<List<Map<String, dynamic>>> fetchDailyTasks(int userId) async {
+Future<List<Map<String, dynamic>>> fetchDailyTasks(int userId) async {
+  final url = '$baseUrl/tasks/tasks/today/$userId';
+  print('Fetching daily tasks from: $url'); // Log the URL
+
   try {
-    final response = await http.get(Uri.parse('$baseUrl/tasks/tasks/today/$userId'));
+    final response = await http.get(Uri.parse(url));
+    print('Response status: ${response.statusCode}'); // Log status code
+    print('Response body: ${response.body}'); // Log the response body
+
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
 
-      // Transform tasks to ensure priority is properly mapped
+      // Log the parsed data
+      print('Parsed data: $data');
+
       return data.map((task) {
         // Cast task to Map<String, dynamic>
         final taskMap = task as Map<String, dynamic>;
@@ -80,18 +88,18 @@ class ApiService {
               priority = "Low"; // Default to "Low"
           }
         } else if (priorityValue is String) {
-          priority = priorityValue; // Use as-is if it's already a string
+          priority = priorityValue;
         } else {
-          priority = "Low"; // Fallback in case of invalid data
+          priority = "Low"; // Fallback
         }
 
-        // Return transformed task data
         return {
           ...taskMap,
-          "priority": priority, // Overwrite priority with string value
+          "priority": priority,
         };
-      }).toList(); // Convert Iterable to List
+      }).toList();
     } else {
+      print('Failed to fetch tasks. Status: ${response.statusCode}');
       throw Exception('Failed to load tasks for today');
     }
   } catch (e) {
@@ -99,6 +107,24 @@ class ApiService {
     rethrow;
   }
 }
+
+// Helper method to map priority
+String _mapPriority(dynamic priorityValue) {
+  if (priorityValue is int) {
+    switch (priorityValue) {
+      case 1:
+        return 'High';
+      case 2:
+        return 'Medium';
+      case 3:
+        return 'Low';
+      default:
+        return 'Low';
+    }
+  }
+  return priorityValue?.toString() ?? 'Low';
+}
+
 
 // Fetch User Streak and Progress
 Future<Map<String, dynamic>> fetchUserProgress(int userId) async {
@@ -162,7 +188,29 @@ Future<Map<String, dynamic>> fetchUserProgress(int userId) async {
   }
 }
 
-  
+ // Create Task
+Future<Map<String, dynamic>> createTask(Map<String, dynamic> taskData) async {
+  try {
+    final url = Uri.parse('$baseUrl/tasks/tasks/');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(taskData), // Ensure taskData includes user_id
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return {"success": true, "data": jsonDecode(response.body)};
+    } else {
+      final error = jsonDecode(response.body);
+      return {"success": false, "message": error['detail'] ?? 'Error occurred'};
+    }
+  } catch (e) {
+    print("Error in createTask: $e");
+    return {"success": false, "message": 'Failed to create task. Please try again later.'};
+  }
+}
+
+
   // Update task status
 Future<void> updateTaskStatus(int taskId, bool isCompleted) async {
   final url = Uri.parse('http://localhost:8000/tasks/tasks/$taskId/complete');

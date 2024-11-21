@@ -4,8 +4,10 @@ import '../../services/api_services.dart';
 
 class UpcomingTasksWidget extends StatefulWidget {
   final int userId;
+  final bool refresh;
 
-  const UpcomingTasksWidget({Key? key, required this.userId}) : super(key: key);
+  const UpcomingTasksWidget({Key? key, required this.userId, this.refresh = false})
+      : super(key: key);
 
   @override
   State<UpcomingTasksWidget> createState() => _UpcomingTasksWidgetState();
@@ -17,14 +19,127 @@ class _UpcomingTasksWidgetState extends State<UpcomingTasksWidget> {
   @override
   void initState() {
     super.initState();
-    _tasksFuture = ApiService().fetchDailyTasks(widget.userId);
+    _fetchTasks();
   }
+@override
+void didUpdateWidget(covariant UpcomingTasksWidget oldWidget) {
+  super.didUpdateWidget(oldWidget);
+
+  // Trigger a task fetch if the refresh flag changes
+  if (widget.refresh != oldWidget.refresh) {
+    _fetchTasks();
+  }
+}
+
+void _fetchTasks() {
+  setState(() {
+    // Call the API to fetch the latest tasks
+    _tasksFuture = ApiService().fetchDailyTasks(widget.userId);
+  });
+}
 
   void _markTaskAsCompleted(int taskId) async {
     await ApiService().updateTaskStatus(taskId, true);
-    setState(() {
-      _tasksFuture = ApiService().fetchDailyTasks(widget.userId);
-    });
+    _fetchTasks(); // Refresh tasks after marking as completed
+  }
+
+  String _formatTime(String? rawDate) {
+    if (rawDate == null || rawDate.isEmpty) return "No Time";
+
+    try {
+      final parsedDate = DateTime.parse(rawDate);
+      return DateFormat.jm().format(parsedDate); // Format to 12-hour time
+    } catch (e) {
+      return "Invalid Date";
+    }
+  }
+
+  Color _getPriorityColor(String priority) {
+    switch (priority.toLowerCase()) {
+      case 'high':
+        return const Color(0xFFEB5757); // Red
+      case 'medium':
+        return const Color(0xFFF2C94C); // Yellow
+      default:
+        return const Color(0xFF27AE60); // Green
+    }
+  }
+
+  Widget _buildTaskCard({
+    required String title,
+    required String time,
+    required String priority,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(right: 16.0),
+        width: 190,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 4.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: Text(
+                      priority,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Row(
+                children: [
+                  const Icon(Icons.access_time, size: 16, color: Colors.white),
+                  const SizedBox(width: 4),
+                  Text(
+                    time,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -74,16 +189,15 @@ class _UpcomingTasksWidgetState extends State<UpcomingTasksWidget> {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: SizedBox(
-                  height: 120.0, // Fixed height for task cards
+                  height: 120.0,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
                     itemCount: tasks.length,
                     itemBuilder: (context, index) {
                       final task = tasks[index];
                       final priority = task["priority"]?.toString() ?? "Low";
                       final rawDate = task["due_date"]?.toString();
-                      final formattedTime = _formatTime(rawDate); // Format time
+                      final formattedTime = _formatTime(rawDate);
                       return _buildTaskCard(
                         title: task["title"] ?? "No Title",
                         time: formattedTime,
@@ -102,108 +216,5 @@ class _UpcomingTasksWidgetState extends State<UpcomingTasksWidget> {
         ),
       ],
     );
-  }
-
-  Widget _buildTaskCard({
-    required String title,
-    required String time,
-    required String priority,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(right: 16.0),
-        width: 190,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(16.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Title and Priority Level Row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 4.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: Text(
-                      priority,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              // Time Row
-              Row(
-                children: [
-                  const Icon(Icons.access_time, size: 16, color: Colors.white),
-                  const SizedBox(width: 4),
-                  Text(
-                    time,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  String _formatTime(String? rawDate) {
-    if (rawDate == null || rawDate.isEmpty) return "No Time";
-
-    try {
-      final parsedDate = DateTime.parse(rawDate);
-      final formattedTime = DateFormat.jm().format(parsedDate); // Format to 12-hour time
-      return formattedTime;
-    } catch (e) {
-      return "Invalid Date";
-    }
-  }
-
-  Color _getPriorityColor(String priority) {
-    switch (priority.toLowerCase()) {
-      case 'high':
-        return const Color(0xFFEB5757); // Red
-      case 'medium':
-        return const Color(0xFFF2C94C); // Yellow
-      default:
-        return const Color(0xFF27AE60); // Green
-    }
   }
 }

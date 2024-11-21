@@ -56,7 +56,7 @@ class MainContent extends StatelessWidget {
 
             // Longest Streak Section
             _buildStatItem(
-              imagePath: "assets/images/fire.png",
+              imagePath: "assets/images/fire.png.png",
               title: 'Longest Streak',
               subtitle: '$longestStreak Days', // Dynamic longest streak
             ),

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import '../shared/backarrow_button.dart';
-import '../shared/navbar.dart';
 import '../widgets/calendar/calendar_widget.dart';
 import '../widgets/calendar/currentday_task.dart';
+import '../shared/navbar.dart';
 import '../services/api_services.dart';
 
 class CalendarPage extends StatefulWidget {
-
-  final int userId; // Accept userId as a parameter
+  final int userId;
 
   const CalendarPage({Key? key, required this.userId}) : super(key: key);
 
@@ -20,14 +19,12 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime _selectedDate = DateTime.now();
   List<Map<String, dynamic>> _tasksForSelectedDate = [];
 
-  // Fetch tasks for the selected date
   Future<void> _fetchTasksForDate(DateTime date) async {
     final formattedDate =
         "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
-    final userId = 1; // Replace with the logged-in user's ID
 
     try {
-      final tasks = await _apiService.fetchTasksForDate(formattedDate, userId);
+      final tasks = await _apiService.fetchTasksForDate(formattedDate, widget.userId);
       setState(() {
         _tasksForSelectedDate = tasks;
       });
@@ -39,83 +36,80 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void initState() {
     super.initState();
-    _fetchTasksForDate(_selectedDate); // Fetch tasks for the current date on load
+    _fetchTasksForDate(_selectedDate);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF03174C),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const BackArrowWidget(),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: const Text(
-                "Calendar",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Nunito',
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const BackArrowWidget(),
+              const Center(
+                child: Text(
+                  "Calendar",
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 60, 121, 190),
+                    fontSize: 70,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'Nunito',
+                  ),
                 ),
               ),
-            ),
-          ),
-          // Display current month above the calendar
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: Text(
-                _getMonthName(_selectedDate.month),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Nunito',
+              const SizedBox(height: 16.0),
+              Center(
+                child: Text(
+                  _getMonthName(_selectedDate.month),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Nunito',
+                  ),
                 ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: CalendarWidget(
-              onDateSelected: (selectedDate) {
-                setState(() {
-                  _selectedDate = selectedDate;
-                });
-                _fetchTasksForDate(selectedDate); // Fetch tasks for the new selected date
-              },
-              selectedDate: _selectedDate,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0, bottom: 8.0, top: 24.0),
-            child: Text(
-              "Tasks for ${_formatDate(_selectedDate)}",
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Nunito',
+              CalendarWidget(
+                onDateSelected: (selectedDate) {
+                  setState(() {
+                    _selectedDate = selectedDate;
+                  });
+                  _fetchTasksForDate(selectedDate);
+                },
+                selectedDate: _selectedDate,
               ),
-            ),
+              const SizedBox(height: 60.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  "Tasks for ${_formatDate(_selectedDate)}",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Nunito',
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: CurrentDayTask(tasks: _tasksForSelectedDate),
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: CurrentDayTask(tasks: _tasksForSelectedDate),
-            ),
-          ),
-          Navbar(userId: widget.userId), // Pass userId to Navbar
-        ],
+        ),
       ),
+      bottomNavigationBar: Navbar(userId: widget.userId),
     );
   }
 
-  // Format date for display
   String _formatDate(DateTime date) {
     const months = [
       "January",
@@ -135,7 +129,6 @@ class _CalendarPageState extends State<CalendarPage> {
     return "$monthName ${date.day}, ${date.year}";
   }
 
-  // Get the name of the month
   String _getMonthName(int month) {
     const months = [
       "January",

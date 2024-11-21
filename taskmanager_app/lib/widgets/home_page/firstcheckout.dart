@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class FirstCheckout extends StatelessWidget {
+  final int userId; // Accept userId dynamically
+
+  const FirstCheckout({Key? key, required this.userId}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -20,6 +24,7 @@ class FirstCheckout extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8.0),
+
         // Scrollable Row with Cards
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -34,7 +39,12 @@ class FirstCheckout extends StatelessWidget {
                   color: const Color(0xFF604EB6),
                   imagePath: "assets/images/books_icon.png",
                   onTap: () {
-                    Navigator.pushNamed(context, '/dailymotivation');
+                    print('Navigating to Daily Motivation');
+                    Navigator.pushNamed(
+                      context,
+                      '/dailymotivation',
+                      arguments: userId, // Pass userId
+                    );
                   },
                 ),
                 _buildCheckoutCard(
@@ -42,7 +52,12 @@ class FirstCheckout extends StatelessWidget {
                   color: const Color(0xFFE2AC5F),
                   imagePath: "assets/images/shopping_icon.png",
                   onTap: () {
-                    Navigator.pushNamed(context, '/weeklysummary');
+                    print('Navigating to Weekly Summary');
+                    Navigator.pushNamed(
+                      context,
+                      '/weeklysummary',
+                      arguments: userId, // Pass userId
+                    );
                   },
                 ),
               ],
@@ -62,14 +77,14 @@ class FirstCheckout extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(right: 16.0), // Consistent spacing between cards
-        width: 190.0, // Standardized card width
+        margin: const EdgeInsets.only(right: 16.0),
+        width: 190.0,
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(16.0),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12.0), // Internal padding for card content
+          padding: const EdgeInsets.all(12.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -83,12 +98,12 @@ class FirstCheckout extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                     height: 1.5,
                   ),
-                  overflow: TextOverflow.ellipsis, // Handle long text gracefully
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               SizedBox(
                 width: 50.0,
-                height: 50.0, // Standardized image size
+                height: 50.0,
                 child: Image.asset(
                   imagePath,
                   fit: BoxFit.cover,
