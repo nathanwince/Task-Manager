@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../shared/backarrow_button.dart';
-import '../shared/navbar.dart';
 import '../widgets/calendar/calendar_widget.dart';
 import '../widgets/calendar/currentday_task.dart';
+import '../shared/navbar.dart'; // Importing your shared Navbar widget
 import '../services/api_services.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -41,72 +41,68 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF03174C),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const BackArrowWidget(),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: const Text(
-                "Calendar",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Nunito',
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const BackArrowWidget(),
+              const Center(
+                child: Text(
+                  "Calendar",
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 60, 121, 190),
+                    fontSize: 70,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'Nunito',
+                  ),
                 ),
               ),
-            ),
-          ),
-          // Display current month above the calendar
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: Text(
-                _getMonthName(_selectedDate.month),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Nunito',
+              const SizedBox(height: 16.0),
+              // Display current month above the calendar
+              Center(
+                child: Text(
+                  _getMonthName(_selectedDate.month),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Nunito',
+                  ),
                 ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: CalendarWidget(
-              onDateSelected: (selectedDate) {
-                setState(() {
-                  _selectedDate = selectedDate;
-                });
-                _fetchTasksForDate(selectedDate); // Fetch tasks for the new selected date
-              },
-              selectedDate: _selectedDate,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0, bottom: 8.0, top: 24.0),
-            child: Text(
-              "Tasks for ${_formatDate(_selectedDate)}",
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Nunito',
+              CalendarWidget(
+                onDateSelected: (selectedDate) {
+                  setState(() {
+                    _selectedDate = selectedDate;
+                  });
+                  _fetchTasksForDate(selectedDate); // Fetch tasks for the new selected date
+                },
+                selectedDate: _selectedDate,
               ),
-            ),
+              const SizedBox(height: 60.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  "Tasks for ${_formatDate(_selectedDate)}",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Nunito',
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: CurrentDayTask(tasks: _tasksForSelectedDate),
+              ),
+            ],
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: CurrentDayTask(tasks: _tasksForSelectedDate),
-            ),
-          ),
-          Navbar(),
-        ],
+        ),
       ),
+      bottomNavigationBar: Navbar(), // Use your shared Navbar widget
     );
   }
 

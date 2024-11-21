@@ -10,13 +10,17 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
-      body: Center( // Center the content in the body
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            RollCallHeader(), // Centered RollCallHeader
-            const SizedBox(height: 30), // Space between logo and button
-          ],
+      body: SafeArea( // Ensures content is within safe boundaries
+        child: SingleChildScrollView( // Enables vertical scrolling
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RollCallHeader(), // Centered RollCallHeader
+                const SizedBox(height: 30), // Space between logo and button
+              ],
+            ),
+          ),
         ),
       ),
       bottomNavigationBar: GetStartedButton(

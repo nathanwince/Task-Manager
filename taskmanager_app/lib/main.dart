@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
                 primarySwatch: Colors.blue,
                 fontFamily: 'Nunito',
               ),
-              initialRoute: '/signup',
+              initialRoute: '/home',
               routes: {
                 '/signup': (context) => SignUpPage(),
                 '/login': (context) => LoginPage(),
@@ -53,7 +53,6 @@ class MyApp extends StatelessWidget {
                 '/weeklysummary': (context) => WeeklySummaryPage(),
               },
               onGenerateRoute: (settings) {
-                // Handle dynamic routes that require arguments
                 if (settings.name == '/home') {
                   final userId = settings.arguments as int;
                   return MaterialPageRoute(
@@ -67,12 +66,12 @@ class MyApp extends StatelessWidget {
                   );
                 }
                 if (settings.name == '/profile') {
-                  final userId = settings.arguments as int; // Extract the userId argument
+                  final userId = settings.arguments as int; 
                   return MaterialPageRoute(
-                    builder: (context) => ProfilePage(userId: userId), // Pass userId to ProfilePage
+                    builder: (context) => ProfilePage(userId: userId), 
                   );
                 }
-                return null; // Default to null if no matching route is found
+                return null; 
               },
             ),
           ),
