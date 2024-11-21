@@ -12,25 +12,25 @@ class Onboarding1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center, // Center horizontally
-        children: [
+      body: SingleChildScrollView( // Enable vertical scrolling
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center, // Center horizontally
+          children: [
+            OnboardingHeader(),
 
-          OnboardingHeader(),
+            const SizedBox(height: 80), // Space below the header
 
+            // Onboarding Slide Content
+            OnboardingSlide1(),
 
-          const SizedBox(height: 80), // Space below the header
+            const SizedBox(height: 150), // Space before the indicator
 
-          // Onboarding Slide Content
-          OnboardingSlide1(),
-
-          const SizedBox(height: 150), // Space before the indicator
-
-          // Centered Slide Indicator
-          Center(
-            child: SlideIndicator(currentIndex: 0, totalSlides: 3),
-          ),
-        ],
+            // Centered Slide Indicator
+            Center(
+              child: SlideIndicator(currentIndex: 0, totalSlides: 3),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: NextButton01(
         onPressed: () {
