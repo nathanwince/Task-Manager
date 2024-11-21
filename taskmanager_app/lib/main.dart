@@ -13,7 +13,7 @@ import 'package:taskmanager_app/pages/dailymotivation.dart';
 import 'package:taskmanager_app/pages/notes.dart';
 import 'package:taskmanager_app/pages/weekly_summary.dart';
 import 'package:taskmanager_app/pages/todays_task.dart';
-import 'package:taskmanager_app/pages/profile.dart'; // Import the profile page
+import 'package:taskmanager_app/pages/profile.dart'; 
 
 void main() {
   runApp(MyApp());
@@ -37,10 +37,10 @@ class MyApp extends StatelessWidget {
                 primarySwatch: Colors.blue,
                 fontFamily: 'Nunito',
               ),
-              initialRoute: '/login',
+              initialRoute: '/signup',
               routes: {
-                '/login': (context) => LoginPage(),
                 '/signup': (context) => SignUpPage(),
+                '/login': (context) => LoginPage(),
                 '/splash': (context) => SplashPage(),
                 '/onboarding1': (context) => Onboarding1(),
                 '/onboarding2': (context) => Onboarding2(),

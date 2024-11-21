@@ -1,14 +1,45 @@
 import 'package:flutter/material.dart';
+import '/services/api_services.dart';
 
-class MotivationTip extends StatelessWidget {
+class MotivationTip extends StatefulWidget {
+  @override
+  _MotivationTipState createState() => _MotivationTipState();
+}
+
+class _MotivationTipState extends State<MotivationTip> {
+  final ApiService apiService = ApiService();
+  String quoteText = "Loading...";
+  String quoteAuthor = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchDailyQuote();
+  }
+
+  Future<void> _fetchDailyQuote() async {
+    try {
+      final quote = await apiService.fetchDailyQuote();
+      setState(() {
+        quoteText = quote["text"] ?? "No quote available";
+        quoteAuthor = quote["author"] ?? "Unknown";
+      });
+    } catch (e) {
+      setState(() {
+        quoteText = "Failed to fetch quote";
+        quoteAuthor = "";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0), // Add padding for top and horizontal alignment
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center, // Center horizontally
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(height: 40), // Space above the title
+          const SizedBox(height: 40),
           Text(
             'Tip of the day',
             style: TextStyle(
@@ -19,10 +50,10 @@ class MotivationTip extends StatelessWidget {
               letterSpacing: 0.30,
             ),
           ),
-          const SizedBox(height: 16), // Space between title and container
+          const SizedBox(height: 16),
           Container(
-            width: double.infinity, // Use full width for responsiveness
-            height: 60,
+            width: double.infinity,
+            height: 100, // Adjusted to fit the text dynamically
             decoration: BoxDecoration(
               color: Color(0xFF1CB0F6),
               borderRadius: BorderRadius.circular(20),
@@ -43,15 +74,32 @@ class MotivationTip extends StatelessWidget {
               ],
             ),
             child: Center(
-              child: Text(
-                'Dedication makes dreams come true.',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 0.30,
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    quoteText,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.30,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "- $quoteAuthor",
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w700,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
