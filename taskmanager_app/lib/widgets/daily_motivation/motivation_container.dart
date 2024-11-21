@@ -5,6 +5,10 @@ import '/pages/notes.dart'; // Import the Notes page
 import '/pages/bookmarks.dart'; // Import the Bookmarks page
 
 class MotivationHolder extends StatelessWidget {
+   final int userId; // Accept the user ID dynamically
+
+  const MotivationHolder({Key? key, required this.userId}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -67,7 +71,7 @@ class MotivationHolder extends StatelessWidget {
                   title: 'Bookmarks',
                   description: 'Save your favorite tips and important tasks',
                   imageUrl: 'assets/images/bookmark.png',
-                  destination: BookmarksPage(), // Navigate to Bookmarks
+                  destination: BookmarksPage(userId: userId), // Pass the userId to BookmarksPage
                 ),
               ],
             ),

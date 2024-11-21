@@ -6,6 +6,11 @@ import '../widgets/calendar/currentday_task.dart';
 import '../services/api_services.dart';
 
 class CalendarPage extends StatefulWidget {
+
+  final int userId; // Accept userId as a parameter
+
+  const CalendarPage({Key? key, required this.userId}) : super(key: key);
+
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
@@ -104,7 +109,7 @@ class _CalendarPageState extends State<CalendarPage> {
               child: CurrentDayTask(tasks: _tasksForSelectedDate),
             ),
           ),
-          Navbar(),
+          Navbar(userId: widget.userId), // Pass userId to Navbar
         ],
       ),
     );

@@ -44,7 +44,6 @@ class NotesPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Navbar(), // Navbar at the bottom
     );
   }
 }

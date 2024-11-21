@@ -5,6 +5,12 @@ import '../shared/navbar.dart';
 import '../widgets/bookmarks/tips.dart';
 
 class BookmarksPage extends StatelessWidget {
+
+  final int userId;
+
+  const BookmarksPage({Key? key, required this.userId}) : super(key: key);
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,7 +129,8 @@ class BookmarksPage extends StatelessWidget {
           ),
 
           // Navbar at the bottom
-          Navbar(),
+         Navbar(userId: userId),
+
         ],
       ),
     );

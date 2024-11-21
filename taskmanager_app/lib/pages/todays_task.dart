@@ -102,7 +102,7 @@ class _TodaysTaskPageState extends State<TodaysTaskPage> {
           ),
         ],
       ),
-      bottomNavigationBar: Navbar(), // Navigation bar at the bottom
+      bottomNavigationBar: Navbar(userId: widget.userId), // Pass userId to Navbar
     );
   }
 

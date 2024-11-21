@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_services.dart';
 import 'login.dart';
-import '../widgets/signup_page/createprofile_button.dart';
-import '../widgets/signup_page/header_content.dart';
-import '../widgets/signup_page/main_content.dart';
 
 class SignUpPage extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
@@ -14,7 +11,7 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF03174C),
+      backgroundColor: Color(0xFF03174C),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -22,49 +19,97 @@ class SignUpPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Back Button
                 IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  icon: Icon(Icons.arrow_back, color: Colors.white),
                   onPressed: () {
                     Navigator.pop(context);
                   },
                 ),
-                // Header Content (Sign Up Text + Optional Profile Picture Placeholder)
-                 SignUpHeader(),
+                Center(
+                  child: Text(
+                    'Sign Up',
+                    style: TextStyle(
+                      color: Color(0xFFE2F2FF),
+                      fontSize: 36,
+                      fontFamily: 'Nunito',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 40),
-                // Main Content (Input Fields)
-                SignUpForm(),
-                const SizedBox(height: 80),
-                // Create Profile Button
-                CreateProfileButton(
-                  onPressed: () async {
-                    final name = nameController.text.trim();
-                    final email = emailController.text.trim();
-                    final password = passwordController.text.trim();
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    hintText: 'Name',
+                    filled: true,
+                    fillColor: Color(0xFFE2F2FF),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    hintText: 'Email',
+                    filled: true,
+                    fillColor: Color(0xFFE2F2FF),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                    filled: true,
+                    fillColor: Color(0xFFE2F2FF),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final name = nameController.text.trim();
+                      final email = emailController.text.trim();
+                      final password = passwordController.text.trim();
 
-                    final success = await apiService.signUpUser(name, email, password);
+                      final success =
+                          await apiService.signUpUser(name, email, password);
 
-                    if (success) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Sign Up Failed'),
-                          content: const Text('Something went wrong. Please try again.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  },
+                      if (success) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginPage(),
+                          ),
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Sign Up Failed'),
+                            content:
+                                Text('Something went wrong. Please try again.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                    child: Text('Sign Up'),
+                  ),
                 ),
               ],
             ),

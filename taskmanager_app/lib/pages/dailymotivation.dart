@@ -9,6 +9,10 @@ const Color kBackgroundColor = Color(0xFF03174C);
 const double kSectionSpacing = 16.0;
 
 class DailyMotivationPage extends StatelessWidget {
+   final int userId; // Accept userId dynamically
+
+  const DailyMotivationPage({Key? key, required this.userId}) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,14 +31,16 @@ class DailyMotivationPage extends StatelessWidget {
             Center(child: MotivationTip()), // Center the tip horizontally
 
             // Motivation Holder
-            Center(child: MotivationHolder()), // Center the holder horizontally
+            Center(child: MotivationHolder(userId: userId)), // Center the holder horizontally
+            // Center the holder horizontally
 
             // Optionally, add more spacing before the Navbar
             SizedBox(height: kSectionSpacing),
           ],
         ),
       ),
-      bottomNavigationBar: Navbar(), // Use bottomNavigationBar instead of placing it in the Column
+            bottomNavigationBar: Navbar(userId: userId)
+, // Use bottomNavigationBar instead of placing it in the Column
     );
   }
 }
