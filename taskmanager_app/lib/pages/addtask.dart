@@ -93,26 +93,28 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
             // Save Button
             _buildSection(
-              CreateTask(
-                userId: widget.userId, // Pass userId here
-                title: _title.isNotEmpty ? _title : "Untitled Task", // Default title if empty
-                description: _description.isNotEmpty ? _description : "No description",
-                dueDate: DateTime(
-                  _selectedDate.year,
-                  _selectedDate.month,
-                  _selectedDate.day,
-                  _toTime.hour,
-                  _toTime.minute,
-                ),
-                priority: int.tryParse(_priority ?? "2") ?? 2, // Default to medium priority
-                onTaskAdded: () {
-                  // Callback after successful addition
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Task added successfully!')),
-                  );
-                },
-              ),
-            ),
+  CreateTask(
+    userId: widget.userId, // Pass userId here
+    title: _title.isNotEmpty ? _title : "Untitled Task", // Default title if empty
+    description: _description.isNotEmpty ? _description : "No description",
+    dueDate: DateTime(
+      _selectedDate.year,
+      _selectedDate.month,
+      _selectedDate.day,
+      _toTime.hour, // Pass the selected hour
+      _toTime.minute, // Pass the selected minute
+    ),
+    priority: int.tryParse(_priority ?? "2") ?? 2, // Default to medium priority
+    toTime: _toTime, // Provide the toTime value here
+    onTaskAdded: () {
+      // Callback after successful addition
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Task added successfully!')),
+      );
+    },
+  ),
+),
+
 
             SizedBox(height: kLargeSpacing), // Space before Navbar
           ],

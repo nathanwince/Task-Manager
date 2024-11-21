@@ -16,6 +16,7 @@ def create_bookmark(db: Session, user_id: int, task_id: int = None, quote_id: in
     return bookmark
 
 
+
 def get_user_bookmarks(db: Session, user_id: int):
     return db.query(Bookmark).filter(Bookmark.user_id == user_id).all()
 
