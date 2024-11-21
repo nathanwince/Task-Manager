@@ -41,7 +41,7 @@ class _MotivationTipState extends State<MotivationTip> {
         children: [
           const SizedBox(height: 40),
           Text(
-            'Tip of the day',
+            'Tip of the Day',
             style: TextStyle(
               color: Colors.white,
               fontSize: 16,
@@ -53,7 +53,7 @@ class _MotivationTipState extends State<MotivationTip> {
           const SizedBox(height: 16),
           Container(
             width: double.infinity,
-            height: 100, // Adjusted to fit the text dynamically
+            padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: Color(0xFF1CB0F6),
               borderRadius: BorderRadius.circular(20),
@@ -73,34 +73,49 @@ class _MotivationTipState extends State<MotivationTip> {
                 ),
               ],
             ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    quoteText,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.30,
+            child: Row(
+              children: [
+                // Quote text and author
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          quoteText,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.30,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "- $quoteAuthor",
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14,
+                            fontFamily: 'Inter',
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "- $quoteAuthor",
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 14,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w700,
-                      fontStyle: FontStyle.italic,
-                    ),
+                ),
+                // Heart Icon
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Image.asset(
+                    'assets/images/heart.png', // Replace with your actual heart icon path
+                    width: 24,
+                    height: 24,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],

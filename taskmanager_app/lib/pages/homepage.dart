@@ -6,10 +6,6 @@ import '../widgets/home_page/streak_bar_widget.dart';
 import '../widgets/home_page/upcoming_task_widget.dart';
 import '../widgets/home_page/check_out_grid_widget.dart';
 
-const double kSectionSpacing = 16.0;
-const double kLargeSpacing = 30.0;
-const Color kBackgroundColor = Color(0xFF03174C);
-
 class HomePage extends StatelessWidget {
   final int userId;
 
@@ -18,7 +14,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: const Color(0xFF03174C),
       body: Center(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -36,12 +32,15 @@ class HomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Header(),
-                    const SizedBox(height: kSectionSpacing),
-                    _buildSection(DateDisplay()),
-                    _buildSection(StreakBarWidget(userId: userId)),
-                    _buildSection(UpcomingTasksWidget(userId: userId)),
-                    _buildSection(CheckOutGridWidget(userId: userId)),
-                    const SizedBox(height: kLargeSpacing),
+                    const SizedBox(height: 16.0),
+                    DateDisplay(),
+                    const SizedBox(height: 16.0),
+                    StreakBarWidget(userId: userId),
+                    const SizedBox(height: 24.0),
+                    UpcomingTasksWidget(userId: userId),
+                    const SizedBox(height: 24.0),
+                    CheckOutGridWidget(userId: userId),
+                    const SizedBox(height: 30.0),
                   ],
                 ),
               ),
@@ -50,19 +49,6 @@ class HomePage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Navbar(),
-    );
-  }
-
-  Widget _buildSection(Widget child) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          child,
-          const SizedBox(height: kSectionSpacing),
-        ],
-      ),
     );
   }
 }
