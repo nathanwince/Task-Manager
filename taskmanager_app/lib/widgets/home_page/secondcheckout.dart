@@ -1,32 +1,20 @@
 import 'package:flutter/material.dart';
 
-// Constants for frequently used values
-const double kCardWidth = 270.0;
-const double kCardHeight = 110.0;
-const double kImageSize = 70.0;
-const double kHorizontalPadding = 16.0;
-const double kSpaceBetweenTextAndImage = 20.0; // Adjusted for visual alignment
-const TextStyle kTitleTextStyle = TextStyle(
-  color: Colors.white,
-  fontSize: 20,
-  fontFamily: 'Nunito',
-  fontWeight: FontWeight.w800,
-  height: 1.5,
-);
-
 class SecondCheckout extends StatelessWidget {
-  final int userId; // Add userId as a parameter
+  final int userId;
 
   const SecondCheckout({Key? key, required this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return _buildSection(
-      SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: SizedBox(
+        height: 120.0, // Fixed height for cards
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
           children: [
-            // View Calendar Card
             _buildCheckoutCard(
               title: 'View\nCalendar',
               color: const Color(0xFF2AACC0),
@@ -35,7 +23,6 @@ class SecondCheckout extends StatelessWidget {
                 Navigator.pushNamed(context, '/calendar');
               },
             ),
-            // Today’s Tasks Card
             _buildCheckoutCard(
               title: 'Today’s\nTasks',
               color: const Color(0xFF49B160),
@@ -44,7 +31,7 @@ class SecondCheckout extends StatelessWidget {
                 Navigator.pushNamed(
                   context,
                   '/todaystask',
-                  arguments: userId, // Pass the userId here
+                  arguments: userId,
                 );
               },
             ),
@@ -54,70 +41,48 @@ class SecondCheckout extends StatelessWidget {
     );
   }
 
-
-  // Helper method to build a section with consistent padding
-  Widget _buildSection(Widget child) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: kHorizontalPadding),
-      child: child,
-    );
-  }
-
-  // Helper method to build each checkout card
   Widget _buildCheckoutCard({
     required String title,
     required Color color,
     required String imagePath,
     required VoidCallback onTap,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: kHorizontalPadding / 2),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: kCardWidth,
-          height: kCardHeight,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: color.withOpacity(0.4),
-                blurRadius: 0,
-                offset: const Offset(4, 4),
-                spreadRadius: 0,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(right: 16.0), // Consistent spacing between cards
+        width: 190.0, // Standardized card width for all cards
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0), // Internal padding for card content
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontFamily: 'Nunito',
+                    fontWeight: FontWeight.w800,
+                    height: 1.5,
+                  ),
+                  overflow: TextOverflow.ellipsis, // Handle long text gracefully
+                ),
               ),
-              BoxShadow(
-                color: color.withOpacity(0.6),
-                blurRadius: 4,
-                offset: const Offset(0, 4),
-                spreadRadius: 0,
+              SizedBox(
+                width: 50.0,
+                height: 50.0, // Standardized image size
+                child: Image.asset(
+                  imagePath,
+                  fit: BoxFit.cover,
+                ),
               ),
             ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(kHorizontalPadding),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Text(
-                    title,
-                    style: kTitleTextStyle,
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-                SizedBox(
-                  width: kImageSize,
-                  height: kImageSize,
-                  child: Image.asset(
-                    imagePath,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ],
-            ),
           ),
         ),
       ),
