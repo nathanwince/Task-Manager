@@ -15,6 +15,9 @@ downloads/
 eggs/
 .eggs/
 lib/
+!taskmanager_app/lib/services/flutter/
+!taskmanager_app/lib/services/flutter/.gitkeep
+
 lib64/
 parts/
 sdist/
